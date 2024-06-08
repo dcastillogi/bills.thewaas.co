@@ -2,8 +2,10 @@ import { decrypt, encrypt } from "@/lib/cipher";
 import clientPromise from "@/lib/mongodb";
 import { NextRequest } from "next/server";
 
-/*
-export const GET = async (request: NextRequest) => {
+export const POST = async (request: NextRequest) => {
+    return Response.json({
+        message: "Hello, world!",
+    });
     const client = await clientPromise;
     const db = await client.db("main");
     const users = await db.collection("users");
@@ -24,18 +26,5 @@ export const GET = async (request: NextRequest) => {
     });
     return Response.json({
         message: "Hello, world!",
-    });
-};
-*/
-
-export const GET = async (request: NextRequest) => {
-    const client = await clientPromise;
-    const db = await client.db("main");
-    const users = await db.collection("users");
-
-    
-    const user = await users.findOne({ email: "dcastillogi@proton.me" });
-    return Response.json({
-        message: decrypt(user!.totpSecret),
     });
 };
