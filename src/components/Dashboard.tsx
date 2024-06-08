@@ -1,5 +1,6 @@
 import { MainNav } from "./dashboard/MainNav";
 import TeamSwitcher from "./dashboard/TeamSwitcher";
+import { ThemeToggle } from "./dashboard/ThemeSwitcher";
 import { UserNav } from "./dashboard/UserNav";
 
 const Dashboard = ({ children }: { children: React.ReactNode }) => {
@@ -10,6 +11,7 @@ const Dashboard = ({ children }: { children: React.ReactNode }) => {
                     <TeamSwitcher />
                     <MainNav className="mx-6" />
                     <div className="ml-auto flex items-center space-x-4">
+                        <ThemeToggle />
                         <UserNav />
                     </div>
                 </div>

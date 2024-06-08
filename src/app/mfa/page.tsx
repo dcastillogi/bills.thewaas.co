@@ -4,16 +4,17 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import OTP from "@/components/OTP";
 
+export const metadata = {
+    title: "Código de Verificación - Billing"
+};
+
 export default async function Home() {
     const session = await getIronSession<SessionData>(
         cookies(),
         sessionOptions
     );
     if (!session.isLoggedIn) redirect("/");
-
-    const handleVerify = async (e: React.FormEvent<HTMLFormElement>) => {
-
-    }
+    if (session.isVerified) redirect("/");
 
     return (
         <main className="w-screen h-screen grid place-items-center">
