@@ -86,17 +86,20 @@ const LoginButton = () => {
                     type: "manual",
                     message: "Credenciales incorrectos",
                 });
+                hCaptchaRef.current?.resetCaptcha();
             } else {
                 toast({
                     title: "Oh oh! Algo salió mal",
                     description: "Hubo un error al iniciar sesión",
                 });
+                hCaptchaRef.current?.resetCaptcha();
             }
         } catch (error) {
             toast({
                 title: "Oh oh! Algo salió mal",
                 description: "Hubo un error al iniciar sesión",
             });
+            hCaptchaRef.current?.resetCaptcha();
         }
     }
 
