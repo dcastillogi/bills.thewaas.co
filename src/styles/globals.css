@@ -90,6 +90,10 @@ a.thewaasco::before {
     display: inline-block;
 }
 
+.dark a.thewaasco::before {
+    filter: invert(1);
+}
+
 @layer base {
     * {
         @apply border-border;
