@@ -71,9 +71,9 @@ const OTP = ({ email }: { email: string }) => {
             body: JSON.stringify(data),
         });
         if (response.ok) {
-            const { status } = await response.json();
+            const { status, team } = await response.json();
             if (status == "success") {
-                router.push("/");
+                router.push(`/${team}`);
             } else {
                 form.setError("pin", {
                     message: "Código OTP inválido.",

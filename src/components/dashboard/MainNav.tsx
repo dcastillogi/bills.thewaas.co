@@ -15,7 +15,7 @@ export function MainNav({
         href="/"
         className="text-sm font-medium transition-colors hover:text-primary"
       >
-        Facturas
+        Cuentas de Cobro
       </Link>
       <Link
         href="/~/contacts"

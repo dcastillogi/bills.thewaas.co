@@ -17,6 +17,11 @@ const Dashboard = ({ children }: { children: React.ReactNode }) => {
                 </div>
             </div>
             {children}
+            <div className="border-t py-4 px-4">
+                <p className="text-xs text-muted-foreground">
+                    Copyrigth © 2024 <a href="https://thewaas.co/?utm_source=bills" className="thewaasco text-black" target="_blank" rel="noopener noreferrer">The Waas Co.</a> Todos los derechos reservados.
+                </p>
+            </div>
         </div>
     );
 };

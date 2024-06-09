@@ -3,19 +3,25 @@ import { getIronSession } from "iron-session";
 import { SessionData, sessionOptions } from "@/lib/iron-session";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import Dashboard from "@/components/Dashboard";
+import BillsDashboard from "@/components/dashboard/BillsDashboard";
+
 
 export default async function Home() {
     const session = await getIronSession<SessionData>(
         cookies(),
         sessionOptions
     );
-    if (session.isLoggedIn) {
-        if (session.isVerified) {
-            redirect(`/${session.team!}`)
-        } else {
-            redirect("/mfa");
-        }
+    if (!session.isLoggedIn) {
+        redirect("/");
+    }
+    if (!session.isVerified) {
+        redirect("/mfa");
     }
 
-    return <Hero />;
+    return (
+        <Dashboard>
+            <BillsDashboard />
+        </Dashboard>
+    );
 }

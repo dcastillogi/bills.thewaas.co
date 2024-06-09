@@ -30,7 +30,6 @@
 
         --success: 138.55 78% 28.000000000000004%;
         --success-background: 123.98 80% 94%;
-        
 
         --border: 240 5.9% 90%;
         --input: 240 5.9% 90%;
@@ -71,6 +70,24 @@
         --input: 240 3.7% 15.9%;
         --ring: 240 4.9% 83.9%;
     }
+}
+
+.PopoverContent {
+    width: var(--radix-popover-trigger-width);
+    max-height: var(--radix-popover-content-available-height);
+}
+
+a.thewaasco::before {
+    content: "";
+    background-image: url("https://thewaas.co/icon.svg");
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    aspect-ratio: 1/1;
+    height: 10px;
+    margin-left: 2px;
+    margin-right: 2px;
+    display: inline-block;
 }
 
 @layer base {

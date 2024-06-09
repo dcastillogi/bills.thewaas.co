@@ -9,13 +9,14 @@ const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
 export const metadata: Metadata = {
     title: "Administra tus facturas - The Waas Co.",
-    description: "Administra tus cuentas de cobro y facturas como independiente de forma fácil y rápida.",
+    description:
+        "Administra tus cuentas de cobro y facturas como independiente de forma fácil y rápida.",
     authors: [
         {
             name: "The Waas Co.",
-            url: "https://thewaas.co"
-        }
-    ]
+            url: "https://thewaas.co",
+        },
+    ],
 };
 
 export default function RootLayout({

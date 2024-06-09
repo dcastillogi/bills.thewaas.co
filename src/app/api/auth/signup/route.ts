@@ -23,6 +23,7 @@ export const POST = async (request: NextRequest) => {
         createdAt: new Date(),
         updatedAt: new Date(),
         totpSecret: encrypt(otplib.authenticator.generateSecret()),
+        defaultTeam: ""
     });
     return Response.json({
         message: "Hello, world!",
