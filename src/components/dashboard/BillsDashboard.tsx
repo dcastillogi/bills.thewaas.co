@@ -22,7 +22,7 @@ const BillsDashboard = () => {
             <div className="w-full px-4 border-b py-3 flex items-center justify-between bg-muted/40 overflow-x-auto">
                 <div>
                     <h2 className="text-3xl font-bold tracking-tight">
-                        Cuentas de Cobro
+                        Balance
                     </h2>
                 </div>
                 <div className="flex items-center justify-end space-x-2 min-w-[600px]">
@@ -33,7 +33,7 @@ const BillsDashboard = () => {
             <div className="border-x max-w-8xl mx-auto w-full lg:h-[calc(100vh-180px)] lg:flex">
                 <table className="lg:h-full border-r w-full lg:w-[25%] lg:min-w-[400px] text-sm max-h-[500px] lg:max-h-none overflow-y-auto">
                     <tbody>
-                        <tr className="flex py-4 px-3 border-b w-full text-left hover:bg-secondary/80 cursor-pointer">
+                        <tr className="flex py-4 px-3 border-b w-full text-left hover:bg-secondary/80 cursor-pointer" onClick={() => setContent("clx5numem000008l0hqys2181")}>
                             <td className="flex-grow">
                                 <div className="flex gap-2 items-center">
                                     <TooltipProvider>
@@ -92,7 +92,10 @@ const BillsDashboard = () => {
                     ) : content === "new" ? (
                         <NewBill />
                     ) : (
-                        <Bill />
+                        <div className="w-full relative pt-4">
+                            <Button variant="ghost" className="absolute right-4 top-2">Costos (0)</Button>
+                            <Bill />
+                        </div>
                     )}
                 </div>
             </div>
