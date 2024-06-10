@@ -28,6 +28,7 @@ import {
     DropdownMenuContent,
     DropdownMenuGroup,
     DropdownMenuItem,
+    DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui//dropdown-menu";
 
@@ -78,7 +79,7 @@ const invoices = [
 
 const BillOptions = () => {
     return (
-        <div className="absolute right-4 top-2 flex">
+        <div className="absolute right-4 top-2 flex items-center">
             <Sheet>
                 <SheetTrigger asChild>
                     <Button variant="ghost">Costos ($0)</Button>
@@ -145,7 +146,7 @@ const BillOptions = () => {
             </Sheet>
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                    <Button variant="ghost">
+                    <Button variant="ghost" className="h-10 w-10 p-0 data-[state=open]:bg-muted">
                         <Ellipsis className="w-4 h-4" />
                     </Button>
                 </DropdownMenuTrigger>
@@ -155,7 +156,8 @@ const BillOptions = () => {
                         <DropdownMenuItem>Descargar</DropdownMenuItem>
                         <DropdownMenuItem>Compartir</DropdownMenuItem>
                         <DropdownMenuItem>Pagado</DropdownMenuItem>
-                        <DropdownMenuItem>Eliminar</DropdownMenuItem>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem className="text-destructive">Eliminar</DropdownMenuItem>
                     </DropdownMenuGroup>
                 </DropdownMenuContent>
             </DropdownMenu>

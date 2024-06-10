@@ -26,18 +26,22 @@ export const GET = async (request: Request) => {
         );
     }
 
-    const client = await clientPromise;
-    const db = await client.db("main");
-    const teams = await db.collection("teams");
-
-    const team = await teams.findOne(
-        {
-            userId: new ObjectId(userId),
-            _id: new ObjectId(searchParams.get("id")!)
-        }
-    );
+    const team = await getTeam(userId, searchParams.get("id")!)
 
     return Response.json({
         data: team
     });
 };
+
+export const getTeam = async(userId: string, teamId: string) => {
+    const client = await clientPromise;
+    const db = await client.db("main");
+    const teams = await db.collection("teams");
+
+    return await teams.findOne(
+        {
+            userId: new ObjectId(userId),
+            _id: new ObjectId(teamId)
+        }
+    );
+}

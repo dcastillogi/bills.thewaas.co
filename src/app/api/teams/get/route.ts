@@ -17,6 +17,14 @@ export const GET = async () => {
         );
     }
 
+    const teamsList = await getTeams(userId)
+
+    return Response.json({
+        data: teamsList
+    });
+};
+
+export const getTeams = async(userId: string) => {
     const client = await clientPromise;
     const db = await client.db("main");
     const teams = await db.collection("teams");
@@ -35,8 +43,5 @@ export const GET = async () => {
             }
         }
     );
-
-    return Response.json({
-        data: await teamsList.toArray()
-    });
-};
+    return await teamsList.toArray()
+}
