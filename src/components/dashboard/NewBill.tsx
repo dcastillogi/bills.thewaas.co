@@ -30,6 +30,8 @@ const productSchema = z.object({
 
 const formSchema = z.object({
     contact: z.string().min(2),
+    language: z.enum(["es", "en"]),
+    currency: z.enum(["COP", "USD"]),
     product: z.array(productSchema).min(1, {
         message: "Debes agregar al menos un producto",
     }),
@@ -80,6 +82,40 @@ const NewBill = () => {
                     <div className="flex gap-4">
                         <ContactSelector className="flex-grow" />
                         <Button variant="secondary">Nuevo</Button>
+                    </div>
+                    <div className="grid grid-cols-2">
+                        <FormField
+                            control={form.control}
+                            name='language'
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Lenguaje</FormLabel>
+                                    <FormControl>
+                                        <Input
+                                            placeholder="shadcn"
+                                            {...field}
+                                        />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name='currency'
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Moneda</FormLabel>
+                                    <FormControl>
+                                        <Input
+                                            placeholder="shadcn"
+                                            {...field}
+                                        />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
                     </div>
                 </div>
                 <Separator />
@@ -144,7 +180,7 @@ const NewBill = () => {
                                     render={({ field }) => (
                                         <FormItem>
                                             <FormLabel>
-                                                Precio Unitario (COP)
+                                                Precio Unitario
                                             </FormLabel>
                                             <FormControl>
                                                 <Input

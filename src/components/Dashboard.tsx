@@ -59,7 +59,7 @@ const Dashboard = async ({
     return (
         <div className="w-screen">
             <div className="border-b overflow-x-auto w-screen">
-                <div className="flex h-16 items-center px-4 max-w-8xl mx-auto">
+                <div className="flex h-16 items-center px-4">
                     <TeamSwitcher
                         teams={teamsList}
                         selectedTeam={{
