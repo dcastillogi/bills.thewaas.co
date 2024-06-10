@@ -14,6 +14,8 @@ import { useState } from "react";
 import Bill from "./Bill";
 import NewBill from "./NewBill";
 
+import BillOptions from "./BillOptions";
+
 const BillsDashboard = () => {
     const [content, setContent] = useState<string | null>(null);
 
@@ -33,7 +35,12 @@ const BillsDashboard = () => {
             <div className="border-x max-w-8xl mx-auto w-full lg:h-[calc(100vh-180px)] lg:flex">
                 <table className="lg:h-full border-r w-full lg:w-[25%] lg:min-w-[400px] text-sm max-h-[500px] lg:max-h-none overflow-y-auto">
                     <tbody>
-                        <tr className="flex py-4 px-3 border-b w-full text-left hover:bg-secondary/80 cursor-pointer" onClick={() => setContent("clx5numem000008l0hqys2181")}>
+                        <tr
+                            className="flex py-4 px-3 border-b w-full text-left hover:bg-secondary/80 cursor-pointer"
+                            onClick={() =>
+                                setContent("clx5numem000008l0hqys2181")
+                            }
+                        >
                             <td className="flex-grow">
                                 <div className="flex gap-2 items-center">
                                     <TooltipProvider>
@@ -84,7 +91,10 @@ const BillsDashboard = () => {
                                     Por favor, selecciona una cuenta de cobro
                                     del menú lateral o crea una nueva cuenta.
                                 </p>
-                                <Button className="w-full" onClick={() => setContent("new")}>
+                                <Button
+                                    className="w-full"
+                                    onClick={() => setContent("new")}
+                                >
                                     Nueva cuenta de cobro
                                 </Button>
                             </div>
@@ -93,7 +103,7 @@ const BillsDashboard = () => {
                         <NewBill />
                     ) : (
                         <div className="w-full relative pt-4">
-                            <Button variant="ghost" className="absolute right-4 top-2">Costos (0)</Button>
+                            <BillOptions />
                             <Bill />
                         </div>
                     )}

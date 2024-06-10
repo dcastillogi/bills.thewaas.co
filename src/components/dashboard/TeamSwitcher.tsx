@@ -49,7 +49,7 @@ import {
 
 const groups = [
   {
-    label: "Personal Account",
+    label: "Cuenta Personal",
     teams: [
       {
         label: "Alicia Koch",
@@ -58,7 +58,7 @@ const groups = [
     ],
   },
   {
-    label: "Teams",
+    label: "Equipos",
     teams: [
       {
         label: "Acme Inc.",

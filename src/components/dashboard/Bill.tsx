@@ -1,7 +1,14 @@
+import { Badge } from "../ui/badge";
+
 const Bill = () => {
     return (
         <div className="w-[800px] mx-auto px-8 py-10 relative">
-            <h1 className="text-2xl font-bold">Cuenta de Cobro</h1>
+            <h1 className="text-2xl font-bold flex gap-2 items-end">
+                Cuenta de Cobro{" "}
+                <Badge className="text-xs leading-3 px-2 pt-1 mb-1 pb-1.5 bg-success-background text-success hover:text-success hover:bg-success-background">
+                    Pagada
+                </Badge>
+            </h1>
             <table className="text-sm mt-10">
                 <tbody>
                     <tr>

@@ -6,7 +6,7 @@ import { UserNav } from "./dashboard/UserNav";
 const Dashboard = ({ children }: { children: React.ReactNode }) => {
     return (
         <div className="w-screen">
-            <div className="border-b">
+            <div className="border-b overflow-x-auto w-screen">
                 <div className="flex h-16 items-center px-4 max-w-8xl mx-auto">
                     <TeamSwitcher />
                     <MainNav className="mx-6" />

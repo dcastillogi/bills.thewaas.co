@@ -34,6 +34,10 @@ const formSchema = z.object({
         message: "Debes agregar al menos un producto",
     }),
     includePaymentLink: z.boolean(),
+    email: z
+        .string()
+        .min(1, { message: "Este campo es obligatorio." })
+        .email("Correo electrónico inválido."),
 });
 
 const NewBill = () => {
@@ -41,7 +45,7 @@ const NewBill = () => {
         resolver: zodResolver(formSchema),
         defaultValues: {
             product: [{}],
-            includePaymentLink: false
+            includePaymentLink: false,
         },
     });
     const { fields, append, remove } = useFieldArray({
@@ -124,7 +128,11 @@ const NewBill = () => {
                                         </FormItem>
                                     )}
                                 />
-                                <Button className="w-full" type="button" variant="outline">
+                                <Button
+                                    className="w-full"
+                                    type="button"
+                                    variant="outline"
+                                >
                                     Agregar Anotación
                                 </Button>
                             </div>
@@ -189,6 +197,31 @@ const NewBill = () => {
                 </div>
                 <Separator />
                 <div>
+                    <Button className="w-full" type="button" variant="outline">
+                        Agregar Anotación
+                    </Button>
+                </div>
+                <Separator />
+                <div className="space-y-4">
+                    <FormField
+                        control={form.control}
+                        name="email"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>
+                                    Correo electrónico de notificación
+                                </FormLabel>
+                                <FormControl>
+                                    <Input
+                                        placeholder="ejemplo@ejemplo.com"
+                                        type="email"
+                                        {...field}
+                                    />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
                     <div className="flex items-center space-x-2">
                         <Switch id="payment-link" />
                         <Label htmlFor="payment-link" className="font-normal">
@@ -196,11 +229,7 @@ const NewBill = () => {
                         </Label>
                     </div>
                 </div>
-                <Button
-                    className="w-full"
-                >
-                    Crear
-                </Button>
+                <Button className="w-full">Crear</Button>
             </form>
         </Form>
     );
