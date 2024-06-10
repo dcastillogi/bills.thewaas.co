@@ -1,5 +1,5 @@
 import { getSession } from "@/lib/session";
-import { getTeam } from "@/lib/utils";
+import { getTeam } from "@/lib/actions";
 
 export const GET = async (request: Request) => {
     const { session, userId } = await getSession();

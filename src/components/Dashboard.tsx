@@ -1,11 +1,11 @@
-import { getTeam } from "@/lib/utils";
+import { getTeam } from "@/lib/actions";
 import { MainNav } from "./dashboard/MainNav";
 import TeamSwitcher from "./dashboard/TeamSwitcher";
 import { ThemeToggle } from "./dashboard/ThemeSwitcher";
 import { UserNav } from "./dashboard/UserNav";
 import { getSession } from "@/lib/session";
 import { notFound, redirect } from "next/navigation";
-import { getTeams } from "@/lib/utils";
+import { getTeams } from "@/lib/actions";
 
 const Dashboard = async ({
     children,
