@@ -1,11 +1,11 @@
-import { getTeam } from "@/app/api/team/get/route";
+import { getTeam } from "@/lib/utils";
 import { MainNav } from "./dashboard/MainNav";
 import TeamSwitcher from "./dashboard/TeamSwitcher";
 import { ThemeToggle } from "./dashboard/ThemeSwitcher";
 import { UserNav } from "./dashboard/UserNav";
 import { getSession } from "@/lib/session";
 import { notFound, redirect } from "next/navigation";
-import { getTeams } from "@/app/api/teams/get/route";
+import { getTeams } from "@/lib/utils";
 
 const Dashboard = async ({
     children,

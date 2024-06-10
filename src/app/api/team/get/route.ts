@@ -1,6 +1,5 @@
-import clientPromise from "@/lib/mongodb";
 import { getSession } from "@/lib/session";
-import { ObjectId } from "mongodb";
+import { getTeam } from "@/lib/utils";
 
 export const GET = async (request: Request) => {
     const { session, userId } = await getSession();
@@ -32,16 +31,3 @@ export const GET = async (request: Request) => {
         data: team
     });
 };
-
-export const getTeam = async(userId: string, teamId: string) => {
-    const client = await clientPromise;
-    const db = await client.db("main");
-    const teams = await db.collection("teams");
-
-    return await teams.findOne(
-        {
-            userId: new ObjectId(userId),
-            _id: new ObjectId(teamId)
-        }
-    );
-}
