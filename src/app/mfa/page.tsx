@@ -14,7 +14,7 @@ export default async function Home() {
         sessionOptions
     );
     if (!session.isLoggedIn) redirect("/");
-    if (session.isVerified) redirect(session.team!);
+    if (session.isVerified) redirect(session.defaultTeam!);
 
     return (
         <main className="w-screen h-screen grid place-items-center">

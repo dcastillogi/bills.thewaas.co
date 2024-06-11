@@ -4,7 +4,7 @@ export interface SessionData {
     email?: string;
     session?: string;
     isVerified?: boolean;
-    team?: string;
+    defaultTeam?: string;
     isLoggedIn: boolean;
 }
 

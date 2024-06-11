@@ -64,7 +64,7 @@ export default function TeamSwitcher({
                         role="combobox"
                         aria-expanded={open}
                         aria-label="Select a team"
-                        className="w-[200px] justify-between"
+                        className="w-[250px] justify-between"
                     >
                         <Avatar className="mr-2 h-5 w-5">
                             <AvatarImage
@@ -78,7 +78,7 @@ export default function TeamSwitcher({
                         <CaretSortIcon className="ml-auto h-4 w-4 shrink-0 opacity-50" />
                     </Button>
                 </PopoverTrigger>
-                <PopoverContent className="w-[200px] p-0">
+                <PopoverContent className="w-[250px] p-0">
                     <Command>
                         <CommandList>
                             <CommandInput placeholder="Search team..." />

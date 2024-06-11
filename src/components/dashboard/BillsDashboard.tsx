@@ -21,9 +21,9 @@ const BillsDashboard = () => {
 
     return (
         <div>
-            <div className="w-full px-4 border-b py-3 flex items-center justify-between bg-muted/40 overflow-x-auto">
+            <div className="w-full px-8 border-b py-8 flex items-center justify-between bg-muted/40 overflow-x-auto">
                 <div>
-                    <h2 className="text-3xl font-bold tracking-tight">
+                    <h2 className="text-3xl font-semibold tracking-tight">
                         Balance
                     </h2>
                 </div>
@@ -32,7 +32,7 @@ const BillsDashboard = () => {
                     <Button onClick={() => setContent("new")}>Crear</Button>
                 </div>
             </div>
-            <div className="border-x max-w-8xl mx-auto w-full lg:h-[calc(100vh-180px)] lg:flex">
+            <div className="mx-auto w-full lg:h-[calc(100vh-223px)] lg:flex">
                 <table className="lg:h-full border-r w-full lg:w-[25%] lg:min-w-[400px] text-sm max-h-[500px] lg:max-h-none overflow-y-auto">
                     <tbody>
                         <tr

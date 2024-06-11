@@ -157,6 +157,7 @@ const BillOptions = () => {
                         <DropdownMenuItem>Compartir</DropdownMenuItem>
                         <DropdownMenuItem>Pagado</DropdownMenuItem>
                         <DropdownMenuSeparator />
+                        <DropdownMenuItem className="text-destructive">Reversar</DropdownMenuItem>
                         <DropdownMenuItem className="text-destructive">Eliminar</DropdownMenuItem>
                     </DropdownMenuGroup>
                 </DropdownMenuContent>

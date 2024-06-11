@@ -9,14 +9,15 @@ import {
     TableRow,
 } from "@/components/ui/table";
 
-import { Button } from "../ui/button"
+import { Button } from "../ui/button";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "../ui/dropdown-menu"
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
+import ContactForm from "./ContactForm";
 
 const invoices = [
     {
@@ -63,27 +64,26 @@ const invoices = [
     },
 ];
 
-const ContactsDashboard = () => {
+const ContactsDashboard = ({ contacts, teamId }: { contacts: any[], teamId: string }) => {
     return (
-        <div className="max-w-5xl px-4 mx-auto mt-6">
-            <div className="py-3 flex items-center justify-between overflow-x-auto px-2.5 mb-2">
-                <div>
-                    <h2 className="text-3xl font-bold tracking-tight">
-                        Contactos
-                    </h2>
-                    <p className="text-muted-foreground">
-                        Here&apos;s a list of your tasks for this month!
-                    </p>
-                </div>
-                <div className="flex items-center justify-end space-x-2 min-w-[600px]">
-                    <Button>Crear</Button>
+        <div className="px-4 mx-auto">
+            <div className="py-8 overflow-x-auto mb-4 bg-muted/40 border-b">
+                <div className="max-w-5xl mx-auto flex items-center justify-between px-2.5">
+                    <div>
+                        <h2 className="text-3xl font-semibold tracking-tight">
+                            Contactos
+                        </h2>
+                    </div>
+                    <div className="flex items-center justify-end space-x-2 min-w-[600px]">
+                        <ContactForm teamId={teamId} />
+                    </div>
                 </div>
             </div>
-            <div className="max-w-8xl mx-auto w-full min-h-[calc(100vh-240px)] lg:flex pb-12">
+            <div className="max-w-5xl mx-auto w-full min-h-[calc(100vh-240px)] lg:flex pb-12">
                 <Table>
                     <TableHeader>
                         <TableRow>
-                            <TableHead className="w-[100px]">Invoice</TableHead>
+                            <TableHead className="w-[100px]">Información</TableHead>
                             <TableHead>Celular</TableHead>
                             <TableHead>Correo Electrónico</TableHead>
                             <TableHead>Ciudad</TableHead>
@@ -91,29 +91,31 @@ const ContactsDashboard = () => {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {invoices.map((invoice) => (
-                            <TableRow key={invoice.invoice}>
+                        {contacts.map((contact) => (
+                            <TableRow key={contact._id}>
                                 <TableCell>
                                     <div className="flex items-center space-x-4">
                                         <Avatar>
-                                            <AvatarImage src="/avatars/01.png" />
-                                            <AvatarFallback>OM</AvatarFallback>
+                                            {
+                                                contact.photoblobUrl ? (
+                                                    <AvatarImage src={contact.photoblobUrl} />
+                                                ) : null
+                                            }
+                                            <AvatarFallback>{contact.name[0]}</AvatarFallback>
                                         </Avatar>
-                                        <div>
+                                        <div className="text-nowrap">
                                             <p className="text-sm font-medium leading-none">
-                                                Sofia Davis
+                                                {contact.name}
                                             </p>
                                             <p className="text-sm text-muted-foreground">
-                                                m@example.com
+                                                {contact.docType == "NIT" ? "Persona Jurídica" : "Persona Natural"}
                                             </p>
                                         </div>
                                     </div>
                                 </TableCell>
-                                <TableCell>{invoice.paymentStatus}</TableCell>
-                                <TableCell>{invoice.paymentMethod}</TableCell>
-                                <TableCell>
-                                    {invoice.totalAmount}
-                                </TableCell>
+                                <TableCell>{contact.phone}</TableCell>
+                                <TableCell>{contact.email}</TableCell>
+                                <TableCell>{contact.city}</TableCell>
                                 <TableCell className="text-right">
                                     <DropdownMenu>
                                         <DropdownMenuTrigger asChild>

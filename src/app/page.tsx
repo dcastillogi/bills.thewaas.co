@@ -11,7 +11,7 @@ export default async function Home() {
     );
     if (session.isLoggedIn) {
         if (session.isVerified) {
-            redirect(`/${session.team!}`)
+            redirect(`/${session.defaultTeam!}`)
         } else {
             redirect("/mfa");
         }

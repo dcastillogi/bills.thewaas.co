@@ -27,7 +27,7 @@ export const POST = async (request: NextRequest) => {
     const secret = decrypt(user!.totpSecret);
     const isValid = authenticator.check(pin, secret);
     session.isVerified = isValid;
-    session.team = user!.defaultTeam;
+    session.defaultTeam = user!.defaultTeam;
     await session.save();
     return Response.json({
         status: isValid ? "success" : "error",

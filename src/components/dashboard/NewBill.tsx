@@ -70,23 +70,25 @@ const NewBill = () => {
             >
                 <div>
                     <h3 className="text-xl font-semibold">
-                        Nueva Cuenta de Cobro
+                        Cuenta de Cobro
                     </h3>
                     <p className="text-sm text-muted-foreground">
                         This is how others will see you on the site.
                     </p>
                 </div>
                 <Separator className="mb-2" />
-                <div className="space-y-1 pb-2">
-                    <Label>Información Cliente</Label>
-                    <div className="flex gap-4">
-                        <ContactSelector className="flex-grow" />
-                        <Button variant="secondary">Nuevo</Button>
+                <div className="space-y-2 pb-2">
+                    <div className="space-y-1">
+                        <Label>Información Cliente</Label>
+                        <div className="flex gap-4">
+                            <ContactSelector className="flex-grow" />
+                            <Button variant="secondary">Nuevo</Button>
+                        </div>
                     </div>
-                    <div className="grid grid-cols-2">
+                    <div className="grid grid-cols-2 gap-4">
                         <FormField
                             control={form.control}
-                            name='language'
+                            name="language"
                             render={({ field }) => (
                                 <FormItem>
                                     <FormLabel>Lenguaje</FormLabel>
@@ -102,7 +104,7 @@ const NewBill = () => {
                         />
                         <FormField
                             control={form.control}
-                            name='currency'
+                            name="currency"
                             render={({ field }) => (
                                 <FormItem>
                                     <FormLabel>Moneda</FormLabel>

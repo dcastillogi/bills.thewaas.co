@@ -33,8 +33,8 @@ const Dashboard = async ({
             label: "Cuenta Personal",
             teams: [
                 {
-                    label: teams.filter((team) => team._id.toString() == session.team)[0].name,
-                    value: session.team,
+                    label: teams.filter((team) => team._id.toString() == session.defaultTeam)[0].name,
+                    value: session.defaultTeam,
                 },
             ],
         },
@@ -44,7 +44,7 @@ const Dashboard = async ({
         teamsList.push({
             label: "Equipos",
             teams: teams
-                .filter((team) => team._id.toString() !== session.team)
+                .filter((team) => team._id.toString() !== session.defaultTeam)
                 .map((t) => ({
                     label: t.name,
                     value: t._id.toString(),
