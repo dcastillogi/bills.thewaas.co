@@ -15,12 +15,23 @@ export async function getSession(verify = true) {
         const sessions = await db.collection("sessions");
         const data = await sessions.findOne({ _id: new ObjectId(session.session) });
         if (!data) {
-            session.destroy();
-            return {session};
+            try {
+                session.destroy();
+                session.save();
+            } catch (error) {
+                
+            }
+            
+            return {session: {isLoggedIn: false}} as any;
         }
         if (data.expiresAt < new Date()) {
-            session.destroy();
-            return {session};
+            try {
+                session.destroy();
+                session.save();
+            } catch (error) {
+                
+            }
+            return {session: {isLoggedIn: false}} as any;
         }
 
         return {session, userId: data.userId};

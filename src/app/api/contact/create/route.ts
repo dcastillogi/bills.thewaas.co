@@ -2,7 +2,6 @@ import { verifyTeam } from "@/lib/actions";
 import clientPromise from "@/lib/mongodb";
 import { getSession } from "@/lib/session";
 import { put } from "@vercel/blob";
-import { ObjectId } from "mongodb";
 
 export const POST = async (req: Request) => {
     const formData = await req.formData();
@@ -13,6 +12,8 @@ export const POST = async (req: Request) => {
         email,
         phone,
         city,
+        state,
+        country,
         address,
         zip,
         lang,
@@ -76,7 +77,11 @@ export const POST = async (req: Request) => {
         docNumber: docNumber.replace(".", ""),
         email,
         phone,
-        city,
+        city: {
+            city,
+            state,
+            country,
+        },
         address,
         zip,
         createdAt: new Date(),

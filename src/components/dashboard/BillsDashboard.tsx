@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { CalendarDateRangePicker } from "@/components/dashboard/CalendarDateRangePicker";
+import { CalendarDateRangePicker } from "@/components/dashboard/bills/CalendarDateRangePicker";
 import { Badge } from "@/components/ui/badge";
 import {
     Tooltip,
@@ -11,10 +11,10 @@ import {
 } from "@/components/ui/tooltip";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useState } from "react";
-import Bill from "./Bill";
-import NewBill from "./NewBill";
+import Bill from "./bills/Bill";
+import NewBill from "./bills/NewBill";
 
-import BillOptions from "./BillOptions";
+import BillOptions from "./bills/BillOptions";
 
 const BillsDashboard = () => {
     const [content, setContent] = useState<string | null>(null);
@@ -24,7 +24,7 @@ const BillsDashboard = () => {
             <div className="w-full px-8 border-b py-8 flex items-center justify-between bg-muted/40 overflow-x-auto">
                 <div>
                     <h2 className="text-3xl font-semibold tracking-tight">
-                        Balance
+                        Cuentas de Cobro
                     </h2>
                 </div>
                 <div className="flex items-center justify-end space-x-2 min-w-[600px]">

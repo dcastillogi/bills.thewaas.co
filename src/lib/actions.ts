@@ -91,3 +91,52 @@ export const verifyTeam = async (userId: ObjectId) => {
 
     return t ? t._id.toString() : false;
 };
+
+export const getCityInfo = async (country: string, state: string, city: string) => {
+    const client = await clientPromise;
+    const db = await client.db("main");
+    const geography = await db.collection("geography");
+    /*
+    const cityInfo = await geography.aggregate([
+        {
+            $match: {},
+        },
+        {
+            $unwind: "$states",
+        },
+        {
+            $replaceRoot: { newRoot: "$states" },
+        },
+        {
+            $match: {},
+        },
+        {
+            $unwind: "$cities",
+        },
+        {
+            $match: { 'cities.code': city },
+        },
+        {
+            $project: {
+                name: "$cities.name",
+                state: "$states.name",
+                country: "$name",
+            },
+        },
+    ]);
+    */
+    const cityInfo = await geography.aggregate([
+        {
+            $match: { "states.cities.code": city },
+        },
+        {
+            $project: {
+                name: "$cities.name",
+                state: "$states.name",
+                country: "$name",
+            },
+        }
+    ]);
+
+    return (await cityInfo.toArray())[0];
+};

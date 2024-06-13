@@ -1,4 +1,4 @@
-import Bill from "@/components/dashboard/Bill"
+import Bill from "@/components/dashboard/bills/Bill"
 
 const BillPage = () => {
     return <Bill />

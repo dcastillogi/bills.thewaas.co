@@ -17,7 +17,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
-import ContactForm from "./ContactForm";
+import ContactForm from "./contacts/ContactForm";
 
 const invoices = [
     {
@@ -64,11 +64,17 @@ const invoices = [
     },
 ];
 
-const ContactsDashboard = ({ contacts, teamId }: { contacts: any[], teamId: string }) => {
+const ContactsDashboard = ({
+    contacts,
+    teamId,
+}: {
+    contacts: any[];
+    teamId: string;
+}) => {
     return (
-        <div className="px-4 mx-auto">
+        <div>
             <div className="py-8 overflow-x-auto mb-4 bg-muted/40 border-b">
-                <div className="max-w-5xl mx-auto flex items-center justify-between px-2.5">
+                <div className="max-w-5xl px-8 mx-auto flex items-center justify-between">
                     <div>
                         <h2 className="text-3xl font-semibold tracking-tight">
                             Contactos
@@ -79,11 +85,13 @@ const ContactsDashboard = ({ contacts, teamId }: { contacts: any[], teamId: stri
                     </div>
                 </div>
             </div>
-            <div className="max-w-5xl mx-auto w-full min-h-[calc(100vh-240px)] lg:flex pb-12">
+            <div className="max-w-5xl mx-auto w-full px-4 min-h-[calc(100vh-240px)] lg:flex pb-12">
                 <Table>
                     <TableHeader>
                         <TableRow>
-                            <TableHead className="w-[100px]">Información</TableHead>
+                            <TableHead className="w-[100px]">
+                                Información
+                            </TableHead>
                             <TableHead>Celular</TableHead>
                             <TableHead>Correo Electrónico</TableHead>
                             <TableHead>Ciudad</TableHead>
@@ -96,26 +104,34 @@ const ContactsDashboard = ({ contacts, teamId }: { contacts: any[], teamId: stri
                                 <TableCell>
                                     <div className="flex items-center space-x-4">
                                         <Avatar>
-                                            {
-                                                contact.photoblobUrl ? (
-                                                    <AvatarImage src={contact.photoblobUrl} />
-                                                ) : null
-                                            }
-                                            <AvatarFallback>{contact.name[0]}</AvatarFallback>
+                                            {contact.photoblobUrl ? (
+                                                <AvatarImage
+                                                    src={contact.photoblobUrl}
+                                                />
+                                            ) : null}
+                                            <AvatarFallback>
+                                                {contact.name[0]}
+                                            </AvatarFallback>
                                         </Avatar>
                                         <div className="text-nowrap">
                                             <p className="text-sm font-medium leading-none">
                                                 {contact.name}
                                             </p>
                                             <p className="text-sm text-muted-foreground">
-                                                {contact.docType == "NIT" ? "Persona Jurídica" : "Persona Natural"}
+                                                {contact.docType == "NIT"
+                                                    ? "Persona Jurídica"
+                                                    : "Persona Natural"}
                                             </p>
                                         </div>
                                     </div>
                                 </TableCell>
                                 <TableCell>{contact.phone}</TableCell>
                                 <TableCell>{contact.email}</TableCell>
-                                <TableCell>{contact.city}</TableCell>
+                                <TableCell>
+                                    {contact.city.city +
+                                        ", " +
+                                        contact.city.country}
+                                </TableCell>
                                 <TableCell className="text-right">
                                     <DropdownMenu>
                                         <DropdownMenuTrigger asChild>

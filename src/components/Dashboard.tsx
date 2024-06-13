@@ -16,7 +16,7 @@ const Dashboard = async ({
 }) => {
     const { session, userId } = await getSession();
     if (!session.isLoggedIn) {
-        redirect("/");
+        redirect("/api/auth/logout");
     }
     if (!session.isVerified) {
         redirect("/mfa");
