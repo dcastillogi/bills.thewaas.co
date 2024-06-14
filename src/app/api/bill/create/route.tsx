@@ -107,6 +107,7 @@ export const POST = async (req: Request) => {
             city: issuerCity.city + ", " + issuerCity.state,
             country: issuerCity.country,
             zip: teamInfo.info.zip,
+            photoUrl: teamInfo.photoUrl,
         },
         recipient: {
             contact: contact,

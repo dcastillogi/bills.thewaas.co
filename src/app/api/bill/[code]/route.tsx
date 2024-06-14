@@ -36,6 +36,7 @@ export const GET = async (req: Request) => {
                     city: bill.issuer.city,
                     country: bill.issuer.country,
                     zip: bill.issuer.zip,
+                    photoUrl: bill.issuer.photoUrl,
                 },
                 recipient: {
                     contact: bill.recipient.contact,
@@ -191,6 +192,7 @@ const MyDocument = ({
             city: string;
             country: string;
             zip: string;
+            photoUrl: string;
         };
         recipient: {
             contact: string;
