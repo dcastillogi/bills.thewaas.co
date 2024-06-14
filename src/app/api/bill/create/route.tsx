@@ -90,6 +90,7 @@ export const POST = async (req: Request) => {
         total += parseFloat(p.price) * parseInt(p.quantity);
         productsFormated.push({
             title: p.title,
+            description: p.description,
             quantity: parseInt(p.quantity),
             price: parseFloat(p.price),
             total: parseFloat(p.price) * parseInt(p.quantity),

@@ -281,7 +281,7 @@ const MyDocument = ({
                                 <Text style={styles.semibold}>
                                     {product.title}
                                 </Text>
-                                {product.description && (
+                                {product.description && product.description.length > 1 && (
                                     <Text style={styles.secondary}>
                                         {product.description}
                                     </Text>
@@ -306,7 +306,7 @@ const MyDocument = ({
             </View>
             <View style={styles.footer} fixed>
                 <Text>
-                    {bill._id} · $40.00 USD. Generado por Bills by The Waas Co.
+                    {bill._id} · {toMoneyFormat(bill.total, bill.currency)}. Generado por Bills by The Waas Co.
                 </Text>
                 <Text
                     render={({ pageNumber, totalPages }) =>

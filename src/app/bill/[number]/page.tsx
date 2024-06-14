@@ -40,10 +40,15 @@ const SignBillPage = () => {
     };
     return (
         <div className="max-w-4xl px-6 mx-auto py-6">
-            <ScrollArea className="border rounded-lg mt-6 w-full">
+            {
+                /*
+<ScrollArea className="border rounded-lg mt-6 w-full">
                 <Bill />
                 <ScrollBar orientation="horizontal" />
             </ScrollArea>
+                */
+            }
+            <iframe src={`/api/bill/${pathname.split("/").pop()}`} className="w-full aspect-[1.141] border rounded-lg mt-6 overflow-hidden"></iframe>
             {showSignButton && (
                 <Button
                     className="w-full mt-6"

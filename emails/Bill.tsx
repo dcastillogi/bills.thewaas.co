@@ -52,10 +52,10 @@ export const BillEmail = ({
     <Html>
         <Head />
         <Preview>
-            Estimado(a) {bill.recipient.name}, tu cuenta de cobro No.
+            Estimado(a) {bill.recipient.name}, la cuenta de cobro No.
             {bill._id} ha sido generada con éxito por un valor de
-            {toMoneyFormat(bill.total, bill.currency)}. Puedes revisar el
-            documento adjunto. Si tienes alguna pregunta, no dudes en
+            {toMoneyFormat(bill.total, bill.currency)}. Puede revisar el
+            documento adjunto. Si tiene alguna pregunta, no dude en
             contactarnos.
         </Preview>
         <Body style={main}>
@@ -84,7 +84,7 @@ export const BillEmail = ({
                         Notificación Cuenta de Cobro
                     </Heading>
                     <Text style={global.text}>
-                        Estimado(a) ${bill.recipient.name}, tu cuenta de cobro
+                        Estimado(a) {bill.recipient.name}, tu cuenta de cobro
                         ha sido generada con éxito. Puedes revisar el documento
                         adjunto. Si tienes alguna pregunta, no dudes en
                         contactarnos.
@@ -117,14 +117,14 @@ export const BillEmail = ({
                                 >
                                     {product.title}
                                 </Text>
-                                {product.description && (
+                                {product.description && product.description.length > 1 && (
                                     <Text style={global.text}>
                                         {product.description}
                                     </Text>
                                 )}
                             </Column>
                             <Column align="right">
-                                <Text style={global.text}>{product.price} {product.quantity}</Text>
+                                <Text style={global.text}>{toMoneyFormat(product.price, bill.currency)} x {product.quantity}</Text>
                             </Column>
                         </Row>
                     ))}
@@ -132,17 +132,11 @@ export const BillEmail = ({
                 <Hr style={global.hr} />
                 <Section style={global.defaultPadding}>
                     <Row style={{ display: "inline-flex", marginBottom: 40 }}>
-                        <Column style={{ width: "170px" }}>
+                        <Column style={{ width: "190px" }}>
                             <Text style={global.paragraphWithBold}>
                                 No. Cuenta de Cobro
                             </Text>
                             <Text style={track.number}>{bill._id}</Text>
-                        </Column>
-                        <Column style={{ width: "150px" }}>
-                            <Text style={global.paragraphWithBold}>
-                                Fecha de Emisión
-                            </Text>
-                            <Text style={track.number}>{bill.emittedAt}</Text>
                         </Column>
                         <Column>
                             <Text style={global.paragraphWithBold}>Total</Text>
