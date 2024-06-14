@@ -6,7 +6,7 @@ import { ObjectId } from "mongodb";
 
 export async function getSession(verify = true) {
     const session = await getIronSession<SessionData>(
-        cookies(),
+        cookies() as any,
         sessionOptions
     );
     if (verify && session.isLoggedIn) {

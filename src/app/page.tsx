@@ -6,7 +6,7 @@ import { redirect } from "next/navigation";
 
 export default async function Home() {
     const session = await getIronSession<SessionData>(
-        cookies(),
+        cookies() as any,
         sessionOptions
     );
     if (session.isLoggedIn) {

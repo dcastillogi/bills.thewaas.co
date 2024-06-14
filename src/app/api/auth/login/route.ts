@@ -63,7 +63,7 @@ export async function POST(request: NextRequest) {
         ip: request.ip,
     });
 
-    const session = await getIronSession<SessionData>(cookies(), {
+    const session = await getIronSession<SessionData>(cookies() as any, {
         ...sessionOptions,
         cookieOptions: {
             ...sessionOptions.cookieOptions,

@@ -10,7 +10,7 @@ export const metadata = {
 
 export default async function Home() {
     const session = await getIronSession<SessionData>(
-        cookies(),
+        cookies() as any,
         sessionOptions
     );
     if (!session.isLoggedIn) redirect("/");
