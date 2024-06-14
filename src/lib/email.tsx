@@ -7,13 +7,15 @@ import { BillEmail } from "../../emails/Bill";
 export const sendBill = async (
     to: { name: string; email: string },
     issuer: { name: string; email: string },
-    billId: string
+    billId: string,
+    bill: any
 ) => {
     try {
         const res = await resend.emails.send({
             from: "no-responder@bills.thewaas.co",
             to: [`${to.name} <${to.email}>`, `${issuer.name} <${issuer.email}>`],
             subject: `Tu Cuenta de Cobro No. ${billId} ha sido generada`,
+            reply_to: `${issuer.name} <${issuer.email}>`,
             text: "it works!",
             attachments: [
                 {
@@ -21,7 +23,7 @@ export const sendBill = async (
                     path: `https://bills.thewaas.co/api/bill/${billId}`,
                 },
             ],
-            react: <BillEmail />
+            react: <BillEmail bill={bill} />
         });
         if (!res.data) {
             return false;

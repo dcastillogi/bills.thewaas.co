@@ -89,7 +89,7 @@ export const POST = async (req: Request) => {
     for (const p of product) {
         total += parseFloat(p.price) * parseInt(p.quantity);
         productsFormated.push({
-            name: p.name,
+            title: p.title,
             quantity: parseInt(p.quantity),
             price: parseFloat(p.price),
             total: parseFloat(p.price) * parseInt(p.quantity),
@@ -139,7 +139,45 @@ export const POST = async (req: Request) => {
     const mail = await sendBill(
         { name: contactInfo.name, email },
         { name: teamInfo.info.name, email: teamInfo.info.email },
-        newBill.insertedId.toString()
+        newBill.insertedId.toString(),
+        {
+            _id: newBill.insertedId.toString(),
+            emittedAt: new Date(createdAt).toLocaleDateString("es-CO", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+            }),
+            currency: currency,
+            expiresAt: new Date(expiresAt).toLocaleDateString("es-CO", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+            }),
+            issuer: {
+                name: teamInfo.info.name,
+                document: teamInfo.info.docType + teamInfo.info.docNumber,
+                email: teamInfo.info.email,
+                phone: teamInfo.info.phone,
+                address: teamInfo.info.address,
+                city: issuerCity.city + ", " + issuerCity.state,
+                country: issuerCity.country,
+                zip: teamInfo.info.zip,
+            },
+            recipient: {
+                contact: contact,
+                document: contactInfo.docType + contactInfo.docNumber,
+                name: contactInfo.name,
+                email: contactInfo.email,
+                phone: contactInfo.phone,
+                address: contactInfo.address,
+                city: recipientCity.city + ", " + recipientCity.state,
+                country: recipientCity.country,
+                zip: contactInfo.zip,
+            },
+            products: productsFormated,
+            subtotal: total,
+            total: total,
+        }
     );
 
     if (mail)

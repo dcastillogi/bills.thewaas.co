@@ -1,3 +1,4 @@
+import { toMoneyFormat } from "@/lib/utils";
 import {
     Body,
     Container,
@@ -14,11 +15,48 @@ import {
 } from "@react-email/components";
 import * as React from "react";
 
-export const BillEmail = () => (
+export const BillEmail = ({
+    bill,
+}: {
+    bill: {
+        _id: string;
+        emittedAt: string;
+        expiresAt: string;
+        issuer: {
+            name: string;
+            document: string;
+            email: string;
+            phone: string;
+            address: string;
+            city: string;
+            country: string;
+            zip: string;
+        };
+        recipient: {
+            contact: string;
+            document: string;
+            name: string;
+            email: string;
+            phone: string;
+            address: string;
+            city: string;
+            country: string;
+            zip: string;
+        };
+        products: any[];
+        currency: string;
+        subtotal: number;
+        total: number;
+    };
+}) => (
     <Html>
         <Head />
         <Preview>
-            Get your order summary, estimated delivery date and more
+            Estimado(a) {bill.recipient.name}, tu cuenta de cobro No.
+            {bill._id} ha sido generada con éxito por un valor de
+            {toMoneyFormat(bill.total, bill.currency)}. Puedes revisar el
+            documento adjunto. Si tienes alguna pregunta, no dudes en
+            contactarnos.
         </Preview>
         <Body style={main}>
             <Container style={container}>
@@ -28,12 +66,15 @@ export const BillEmail = () => (
                             <Text style={global.paragraphWithBold}>
                                 No. Cuenta de Cobro
                             </Text>
-                            <Text style={track.number}>
-                                clx5numem000008l0hqys2181
-                            </Text>
+                            <Text style={track.number}>{bill._id}</Text>
                         </Column>
                         <Column align="right">
-                            <Link style={global.button}>Aceptar</Link>
+                            <Link
+                                href={`${process.env.HOST}/bill/${bill._id}`}
+                                style={global.button}
+                            >
+                                Aceptar
+                            </Link>
                         </Column>
                     </Row>
                 </Section>
@@ -43,7 +84,7 @@ export const BillEmail = () => (
                         Notificación Cuenta de Cobro
                     </Heading>
                     <Text style={global.text}>
-                        Estimado(a) Daniel Castillo Giraldo, tu cuenta de cobro
+                        Estimado(a) ${bill.recipient.name}, tu cuenta de cobro
                         ha sido generada con éxito. Puedes revisar el documento
                         adjunto. Si tienes alguna pregunta, no dudes en
                         contactarnos.
@@ -51,11 +92,9 @@ export const BillEmail = () => (
                 </Section>
                 <Hr style={global.hr} />
                 <Section style={global.defaultPadding}>
-                    <Text style={adressTitle}>
-                        Emisor: Daniel Castillo Giraldo
-                    </Text>
+                    <Text style={adressTitle}>Emisor: {bill.issuer.name}</Text>
                     <Text style={{ ...global.text, fontSize: 14 }}>
-                        CC 1002592605
+                        {bill.issuer.document}
                     </Text>
                 </Section>
                 <Hr style={global.hr} />
@@ -66,22 +105,29 @@ export const BillEmail = () => (
                         paddingBottom: "40px",
                     }}
                 >
-                    <Row>
-                        <Column
-                            style={{
-                                verticalAlign: "top",
-                            }}
-                        >
-                            <Text style={{ ...paragraph, fontWeight: "500" }}>
-                                Brazil 2022/23 Stadium Away Nike Dri-FIT Soccer
-                                Jersey
-                            </Text>
-                            <Text style={global.text}>Size L (12–14)</Text>
-                        </Column>
-                        <Column align="right">
-                            <Text style={global.text}>$90.00</Text>
-                        </Column>
-                    </Row>
+                    {bill.products.map((product, index) => (
+                        <Row key={`product-${index}`}>
+                            <Column
+                                style={{
+                                    verticalAlign: "top",
+                                }}
+                            >
+                                <Text
+                                    style={{ ...paragraph, fontWeight: "500" }}
+                                >
+                                    {product.title}
+                                </Text>
+                                {product.description && (
+                                    <Text style={global.text}>
+                                        {product.description}
+                                    </Text>
+                                )}
+                            </Column>
+                            <Column align="right">
+                                <Text style={global.text}>{product.price} {product.quantity}</Text>
+                            </Column>
+                        </Row>
+                    ))}
                 </Section>
                 <Hr style={global.hr} />
                 <Section style={global.defaultPadding}>
@@ -90,22 +136,29 @@ export const BillEmail = () => (
                             <Text style={global.paragraphWithBold}>
                                 No. Cuenta de Cobro
                             </Text>
-                            <Text style={track.number}>C0106373851</Text>
+                            <Text style={track.number}>{bill._id}</Text>
                         </Column>
                         <Column style={{ width: "150px" }}>
                             <Text style={global.paragraphWithBold}>
                                 Fecha de Emisión
                             </Text>
-                            <Text style={track.number}>Sep 22, 2022</Text>
+                            <Text style={track.number}>{bill.emittedAt}</Text>
                         </Column>
                         <Column>
                             <Text style={global.paragraphWithBold}>Total</Text>
-                            <Text style={track.number}>Sep 22, 2022</Text>
+                            <Text style={track.number}>
+                                {toMoneyFormat(bill.total, bill.currency)}
+                            </Text>
                         </Column>
                     </Row>
                     <Row>
                         <Column align="center">
-                            <Link style={global.button}>Aceptar</Link>
+                            <Link
+                                style={global.button}
+                                href={`${process.env.HOST}/bill/${bill._id}`}
+                            >
+                                Aceptar
+                            </Link>
                         </Column>
                     </Row>
                 </Section>
@@ -123,7 +176,7 @@ export const BillEmail = () => (
                                     marginBottom: "0",
                                 }}
                             >
-                                57 3183911339
+                                {bill.issuer.phone}
                             </Text>
                         </Column>
                         <Column>
@@ -133,7 +186,7 @@ export const BillEmail = () => (
                                     marginBottom: "0",
                                 }}
                             >
-                                facturas@dcastillogi.com
+                                {bill.issuer.email}
                             </Text>
                         </Column>
                     </Row>
