@@ -39,16 +39,23 @@ const SignBillPage = () => {
         setOpen(true);
     };
     return (
-        <div className="max-w-4xl px-6 mx-auto py-6">
-            {
-                /*
+        <div className="max-w-4xl px-6 mx-auto py-8">
+            {/*
 <ScrollArea className="border rounded-lg mt-6 w-full">
                 <Bill />
                 <ScrollBar orientation="horizontal" />
             </ScrollArea>
-                */
-            }
-            <iframe src={`/api/bill/${pathname.split("/").pop()}`} className="w-full aspect-[1.141] border rounded-lg mt-6 overflow-hidden"></iframe>
+                */}
+            <div>
+                <h3 className="text-3xl font-semibold">Cuenta de Cobro</h3>
+                <p className="text-sm text-muted-foreground">
+                    Bienvenido(a), a continuación puede consultar la cuenta de cobro <strong>No. {pathname.split("/").pop()}</strong>
+                </p>
+            </div>
+            <iframe
+                src={`/api/bill/${pathname.split("/").pop()}`}
+                className="w-full aspect-[0.7] border rounded-lg mt-8 overflow-hidden"
+            ></iframe>
             {showSignButton && (
                 <Button
                     className="w-full mt-6"
@@ -69,7 +76,11 @@ const SignBillPage = () => {
             )}
 
             <Dialog open={open} onOpenChange={setOpen}>
-                <SignVerify billId={pathname.split("/").pop() as string} close={() => setOpen(false)} hideButton={() => setShowSignButton(false)} />
+                <SignVerify
+                    billId={pathname.split("/").pop() as string}
+                    close={() => setOpen(false)}
+                    hideButton={() => setShowSignButton(false)}
+                />
             </Dialog>
             <HCaptcha
                 sitekey="d94e78ec-a5ee-4204-adca-376cfa3ac354"

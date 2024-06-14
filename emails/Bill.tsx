@@ -132,7 +132,7 @@ export const BillEmail = ({
                 <Hr style={global.hr} />
                 <Section style={global.defaultPadding}>
                     <Row style={{ display: "inline-flex", marginBottom: 40 }}>
-                        <Column style={{ width: "190px" }}>
+                        <Column style={{ width: "220px" }}>
                             <Text style={global.paragraphWithBold}>
                                 No. Cuenta de Cobro
                             </Text>
