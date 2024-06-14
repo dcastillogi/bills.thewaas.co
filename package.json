@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "email": "email dev"
   },
   "dependencies": {
     "@hcaptcha/react-hcaptcha": "^1.10.1",
@@ -26,6 +27,7 @@
     "@radix-ui/react-switch": "^1.0.3",
     "@radix-ui/react-toast": "^1.1.5",
     "@radix-ui/react-tooltip": "^1.0.7",
+    "@react-email/components": "0.0.19",
     "@react-pdf/renderer": "^3.4.4",
     "@vercel/blob": "^0.23.3",
     "@vonage/server-sdk": "^3.14.1",
@@ -44,7 +46,9 @@
     "react": "^18",
     "react-day-picker": "^8.10.1",
     "react-dom": "^18",
+    "react-email": "2.1.4",
     "react-hook-form": "^7.51.5",
+    "resend": "^3.3.0",
     "tailwind-merge": "^2.3.0",
     "tailwindcss-animate": "^1.0.7",
     "zod": "^3.23.8"

@@ -59,6 +59,7 @@ export const GET = async (req: Request) => {
                 _id: 1,
                 currency: 1,
                 lang: 1,
+                email: 1,
             },
         }
     );

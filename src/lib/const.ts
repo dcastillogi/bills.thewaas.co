@@ -40,3 +40,8 @@ export const DOCUMENT_TYPES = [
         id: "NIT",
     },
 ];
+
+export const SIGN_SMS: Record<string, string> = {
+    "ES": "Su código para aceptar la CUENTA DE COBRO No. ****{id} es: {code}",
+    "EN": "Your code to accept the BILLING STATEMENT No. ****{id} is: {code}",
+}

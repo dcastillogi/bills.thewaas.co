@@ -5,7 +5,7 @@ export const GET = async (req: Request) => {
     if (!searchParams.has("city") || !searchParams.has("state") || !searchParams.has("country")) {
         return Response.json(
             {
-                message: "City name is required",
+                message: "Some parameters are missing",
             },
             {
                 status: 400,

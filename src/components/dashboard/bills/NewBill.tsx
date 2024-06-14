@@ -23,6 +23,8 @@ import {
 
 import { CURRENCIES, LANGUAGES } from "@/lib/const";
 
+import { usePathname } from "next/navigation";
+
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "../../ui/input";
@@ -115,15 +117,25 @@ const NewBill = () => {
         name: "annotations",
     });
 
+    const pathname = usePathname();
+
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
         const response = await fetch("/api/bill/create", {
             method: "POST",
-            body: JSON.stringify(values),
+            body: JSON.stringify({
+                ...values,
+                expiresAt: new Date(new Date(values.expiresAt + "T23:59:59Z").getTime() + new Date().getTimezoneOffset() * 60000).toISOString(),
+                createdAt: new Date(new Date(values.createdAt + "T00:00:00Z").getTime() + new Date().getTimezoneOffset() * 60000).toISOString(),
+            }),            
+            headers: {
+                team: pathname.split("/")[1],
+            },
         });
         if (response.ok) {
+            const data = await response.json();
             toast({
                 title: "Cuenta de cobro creada",
-                description: "La cuenta de cobro No. asdasdasddsa ha sido creada.",
+                description: `La cuenta de cobro No. ${data.bill} ha sido creada.`,
             });
         } else {
             toast({
@@ -138,6 +150,9 @@ const NewBill = () => {
     };
     const changeCurrency = (currency: any) => {
         form.setValue("currency", currency);
+    };
+    const changeEmail = (email: any) => {
+        form.setValue("email", email);
     };
 
     return (
@@ -167,6 +182,7 @@ const NewBill = () => {
                                             onChangeValue={field.onChange}
                                             changeLang={changeLang}
                                             changeCurrency={changeCurrency}
+                                            changeEmail={changeEmail}
                                         />
                                         <Button
                                             variant="secondary"
@@ -523,7 +539,11 @@ const NewBill = () => {
                         </Label>
                     </div>
                 </div>
-                <Button className="w-full">Crear</Button>
+                <Button className="w-full">
+                    {form.formState.isSubmitting
+                        ? "Creando cuenta de cobro..."
+                        : "Crear cuenta de cobro"}
+                </Button>
             </form>
         </Form>
     );

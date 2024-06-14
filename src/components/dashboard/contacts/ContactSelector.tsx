@@ -22,7 +22,21 @@ import {
 
 import { usePathname } from "next/navigation";
 
-export default function ContactSelector({ className, onChangeValue, changeLang, changeCurrency }: { className?: string, onChangeValue: (value: string) => void, changeLang: (lang: string) => void, changeCurrency: (currency: string) => void}) {
+export default function ContactSelector(
+    {
+        className,
+        onChangeValue,
+        changeLang,
+        changeCurrency,
+        changeEmail,
+    }: {
+        className?: string;
+        onChangeValue: (value: string) => void;
+        changeLang: (lang: string) => void;
+        changeCurrency: (currency: string) => void;
+        changeEmail: (email: string) => void
+    },
+) {
     const [open, setOpen] = React.useState(false);
     const [loading, setLoading] = React.useState(true);
     const [selectedContact, setSelectedContact] = React.useState<any>(null);
@@ -75,7 +89,11 @@ export default function ContactSelector({ className, onChangeValue, changeLang, 
                 <Command>
                     <CommandList>
                         <CommandInput placeholder="Buscar contacto..." />
-                        <CommandEmpty>{loading ? "Cargando Contactos..." : "No se encontraron contactos."}</CommandEmpty>
+                        <CommandEmpty>
+                            {loading
+                                ? "Cargando Contactos..."
+                                : "No se encontraron contactos."}
+                        </CommandEmpty>
                         <CommandGroup></CommandGroup>
                         {contacts.map((contact) => (
                             <CommandItem
@@ -86,22 +104,23 @@ export default function ContactSelector({ className, onChangeValue, changeLang, 
                                     onChangeValue(contact._id);
                                     changeCurrency(contact.currency);
                                     changeLang(contact.lang);
+                                    changeEmail(contact.email);
                                 }}
                                 className="text-sm"
                             >
                                 <Avatar className="mr-2 h-5 w-5">
-                                    {
-                                        contact.blobUrl && (
-                                            <AvatarImage
-                                                src={contact.blobUrl}
-                                                alt={contact.name}
-                                                className="grayscale"
-                                            />
-                                        )
-                                    }
-                                    <AvatarFallback>{contact.name[0]}</AvatarFallback>
+                                    {contact.blobUrl && (
+                                        <AvatarImage
+                                            src={contact.blobUrl}
+                                            alt={contact.name}
+                                            className="grayscale"
+                                        />
+                                    )}
+                                    <AvatarFallback>
+                                        {contact.name[0]}
+                                    </AvatarFallback>
                                 </Avatar>
-                                {contact.name}  
+                                {contact.name}
                                 <CheckIcon
                                     className={cn(
                                         "ml-auto h-4 w-4",

@@ -92,51 +92,65 @@ export const verifyTeam = async (userId: ObjectId) => {
     return t ? t._id.toString() : false;
 };
 
-export const getCityInfo = async (country: string, state: string, city: string) => {
+export const getCityInfo = async (
+    country: string,
+    state: string,
+    city: string
+) => {
     const client = await clientPromise;
     const db = await client.db("main");
     const geography = await db.collection("geography");
-    /*
     const cityInfo = await geography.aggregate([
         {
-            $match: {},
+            $match: {
+                code: country,
+            },
+        },
+        {
+            $project: {
+                states: 1,
+                name: 1,
+                _id: 0,
+            },
         },
         {
             $unwind: "$states",
         },
         {
-            $replaceRoot: { newRoot: "$states" },
+            $match: {
+                "states.code": state,
+            },
         },
         {
-            $match: {},
+            $project: {
+                cities: "$states.cities",
+                "states.name": 1,
+                name: 1,
+            },
         },
         {
             $unwind: "$cities",
         },
         {
-            $match: { 'cities.code': city },
+            $match: {
+                "cities.code": city,
+            },
         },
         {
             $project: {
-                name: "$cities.name",
-                state: "$states.name",
-                country: "$name",
+                "cities.name": 1,
+                "states.name": 1,
+                name: 1,
             },
         },
     ]);
-    */
-    const cityInfo = await geography.aggregate([
-        {
-            $match: { "states.cities.code": city },
-        },
-        {
-            $project: {
-                name: "$cities.name",
-                state: "$states.name",
-                country: "$name",
-            },
-        }
-    ]);
-
-    return (await cityInfo.toArray())[0];
+    const c = (await cityInfo.toArray())
+    if (c.length != 1) {
+        return false
+    }
+    return {
+        country: c[0].name,
+        state: c[0].states.name,
+        city: c[0].cities.name
+    };
 };
