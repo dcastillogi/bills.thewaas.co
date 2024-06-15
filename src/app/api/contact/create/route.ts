@@ -2,6 +2,7 @@ import { verifyTeam } from "@/lib/actions";
 import clientPromise from "@/lib/mongodb";
 import { getSession } from "@/lib/session";
 import { put } from "@vercel/blob";
+import { ObjectId } from "mongodb";
 
 export const POST = async (req: Request) => {
     const formData = await req.formData();
@@ -22,7 +23,7 @@ export const POST = async (req: Request) => {
 
     const { session, userId } = await getSession();
 
-    const team = verifyTeam(userId);
+    const team = await verifyTeam(userId);
 
     if (!team) {
         return Response.json(
@@ -71,7 +72,7 @@ export const POST = async (req: Request) => {
     }
 
     const contact = await contacts.insertOne({
-        teamId: team,
+        teamId: new ObjectId(team),
         name,
         docType,
         docNumber: docNumber.replace(".", ""),
