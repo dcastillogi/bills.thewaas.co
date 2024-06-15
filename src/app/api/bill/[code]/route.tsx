@@ -213,7 +213,7 @@ const MyDocument = ({
     };
 }) => (
     <Document>
-        <Page size="A4" style={{...styles.page, borderTop: `6px solid #EBB413`,}}>
+        <Page size="A4" style={{...styles.page, borderTop: `6px solid ${bill.issuer.color}`,}}>
             <View style={styles.section}>
                 <View>
                     <Text style={styles.title}>Cuenta de Cobro</Text>
