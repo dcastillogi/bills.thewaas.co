@@ -37,6 +37,7 @@ export const GET = async (req: Request) => {
                     country: bill.issuer.country,
                     zip: bill.issuer.zip,
                     photoUrl: bill.issuer.photoUrl,
+                    color: bill.issuer.color,
                 },
                 recipient: {
                     contact: bill.recipient.contact,
@@ -90,7 +91,6 @@ Font.register({
 const styles = StyleSheet.create({
     page: {
         backgroundColor: "white",
-        borderTop: "6px solid #EBB413",
         fontFamily: "Inter",
     },
     section: {
@@ -193,6 +193,7 @@ const MyDocument = ({
             country: string;
             zip: string;
             photoUrl: string;
+            color: string;
         };
         recipient: {
             contact: string;
@@ -212,13 +213,13 @@ const MyDocument = ({
     };
 }) => (
     <Document>
-        <Page size="A4" style={styles.page}>
+        <Page size="A4" style={{...styles.page, borderTop: `6px solid #EBB413`,}}>
             <View style={styles.section}>
                 <View>
                     <Text style={styles.title}>Cuenta de Cobro</Text>
                     {/* eslint-disable-next-line */}
                     <Image
-                        src="https://jotnegymsjbalelr.public.blob.vercel-storage.com/teams/666b7972d890e93713c66e13-IJD0bX0Wv9ak0M0CHLh6b8uK4IQZO8.jpg"
+                        src={bill.issuer.photoUrl}
                         style={{
                             width: 100,
                             height: 100,
