@@ -108,6 +108,7 @@ export const POST = async (req: Request) => {
             country: issuerCity.country,
             zip: teamInfo.info.zip,
             photoUrl: teamInfo.photoUrl,
+            color: teamInfo.color,
         },
         recipient: {
             contact: contact,
