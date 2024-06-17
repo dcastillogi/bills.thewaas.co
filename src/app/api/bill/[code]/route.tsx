@@ -13,17 +13,18 @@ export const GET = async (req: Request) => {
             status: 404,
         });
     }
+    console.log(bill.expiresAt);
     // return it as stream
     const pdfStream = await ReactPDF.renderToStream(
         <MyDocument
             bill={{
                 _id: bill._id.toString(),
-                emittedAt: new Date(bill.emittedAt).toLocaleDateString(
+                emittedAt: bill.emittedAt.toLocaleDateString(
                     "es-CO",
                     { year: "numeric", month: "long", day: "numeric", timeZone: "America/Bogota"},
                 ),
                 currency: bill.currency,
-                expiresAt: new Date(bill.expiresAt).toLocaleDateString(
+                expiresAt: bill.expiresAt.toLocaleDateString(
                     "es-CO",
                     { year: "numeric", month: "long", day: "numeric", timeZone: "America/Bogota"}
                 ),
@@ -74,6 +75,7 @@ import {
     Font,
     Image,
 } from "@react-pdf/renderer";
+import { time } from "console";
 import { ObjectId } from "mongodb";
 
 Font.register({

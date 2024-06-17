@@ -98,8 +98,20 @@ export const POST = async (req: Request) => {
         });
     }
 
-    const emmitedAtAdjusted = moment(createdAt).tz('America/Bogota').startOf('day').toDate();
-    const expiresAtAdjusted = moment(expiresAt).tz('America/Bogota').endOf('day').toDate();
+    let paymentsFormated = [];
+    let paymentsTotal = 0;
+    if (payments.length > 0) {
+        for (const p of payments) {
+            paymentsTotal += parseFloat(p.amount);
+            paymentsFormated.push({
+                amount: parseFloat(p.amount),
+                date: moment(p.date).endOf('day').tz('America/Bogota').toDate(),
+            });
+        }
+    }
+
+    const emmitedAtAdjusted = moment(createdAt).startOf('day').tz('America/Bogota').toDate();
+    const expiresAtAdjusted = moment(expiresAt).endOf('day').tz('America/Bogota').toDate();
     const newBill = await collection.insertOne({
         issuer: {
             name: teamInfo.info.name,
@@ -134,7 +146,7 @@ export const POST = async (req: Request) => {
         emittedAt: emmitedAtAdjusted,
         createdAt: new Date(),
         expiresAt: expiresAtAdjusted,
-        payments,
+        payments: paymentsFormated,
         annotations,
         subtotal: total,
         total: total,
@@ -185,7 +197,7 @@ export const POST = async (req: Request) => {
             products: productsFormated,
             subtotal: total,
             total: total,
-            payments
+            payments: paymentsFormated,
         }
     );
 
