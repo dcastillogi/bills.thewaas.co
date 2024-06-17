@@ -106,6 +106,7 @@ const BillsDashboard = ({ teamId }: { teamId: string }) => {
                                                             year: "numeric",
                                                             month: "long",
                                                             day: "numeric",
+                                                            timeZone: "America/Bogota",
                                                         }
                                                     )}
                                                 </p>

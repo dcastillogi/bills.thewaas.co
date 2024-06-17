@@ -20,12 +20,12 @@ export const GET = async (req: Request) => {
                 _id: bill._id.toString(),
                 emittedAt: new Date(bill.emittedAt).toLocaleDateString(
                     "es-CO",
-                    { year: "numeric", month: "long", day: "numeric" }
+                    { year: "numeric", month: "long", day: "numeric", timeZone: "America/Bogota"},
                 ),
                 currency: bill.currency,
                 expiresAt: new Date(bill.expiresAt).toLocaleDateString(
                     "es-CO",
-                    { year: "numeric", month: "long", day: "numeric" }
+                    { year: "numeric", month: "long", day: "numeric", timeZone: "America/Bogota"}
                 ),
                 issuer: {
                     name: bill.issuer.name,
@@ -342,7 +342,8 @@ const MyDocument = ({
                             <Text style={styles.semibold}>
                                 Pago {index + 1}{" "}
                                 ({new Date(payment.date).toLocaleDateString(
-                                    "es-CO"
+                                    "es-CO",
+                                    {timeZone: "America/Bogota"}
                                 )})
                                 :
                             </Text>

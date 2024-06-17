@@ -3,6 +3,7 @@ import { sendBill } from "@/lib/email";
 import clientPromise from "@/lib/mongodb";
 import { getSession } from "@/lib/session";
 import { ObjectId } from "mongodb";
+import moment from "moment-timezone";
 
 export const POST = async (req: Request) => {
     const {
@@ -97,6 +98,8 @@ export const POST = async (req: Request) => {
         });
     }
 
+    const emmitedAtAdjusted = moment(createdAt).tz('America/Bogota').startOf('day').toDate();
+    const expiresAtAdjusted = moment(expiresAt).tz('America/Bogota').endOf('day').toDate();
     const newBill = await collection.insertOne({
         issuer: {
             name: teamInfo.info.name,
@@ -128,9 +131,9 @@ export const POST = async (req: Request) => {
         products: productsFormated,
         paymentLink,
         email,
-        emittedAt: new Date(createdAt),
+        emittedAt: emmitedAtAdjusted,
         createdAt: new Date(),
-        expiresAt: new Date(expiresAt),
+        expiresAt: expiresAtAdjusted,
         payments,
         annotations,
         subtotal: total,
@@ -145,16 +148,18 @@ export const POST = async (req: Request) => {
         newBill.insertedId.toString(),
         {
             _id: newBill.insertedId.toString(),
-            emittedAt: new Date(createdAt).toLocaleDateString("es-CO", {
+            emittedAt: emmitedAtAdjusted.toLocaleDateString("es-CO", {
                 year: "numeric",
                 month: "long",
                 day: "numeric",
+                timeZone: "America/Bogota",
             }),
             currency: currency,
-            expiresAt: new Date(expiresAt).toLocaleDateString("es-CO", {
+            expiresAt: expiresAtAdjusted.toLocaleDateString("es-CO", {
                 year: "numeric",
                 month: "long",
                 day: "numeric",
+                timeZone: "America/Bogota",
             }),
             issuer: {
                 name: teamInfo.info.name,
