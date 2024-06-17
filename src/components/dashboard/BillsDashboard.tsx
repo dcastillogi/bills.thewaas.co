@@ -10,14 +10,31 @@ import {
     TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Bill from "./bills/Bill";
 import NewBill from "./bills/NewBill";
 
 import BillOptions from "./bills/BillOptions";
+import { toMoneyFormat } from "@/lib/utils";
 
-const BillsDashboard = () => {
+const BillsDashboard = ({ teamId }: { teamId: string }) => {
     const [content, setContent] = useState<string | null>(null);
+    const [bills, setBills] = useState<any[] | null>(null);
+
+    useEffect(() => {
+        const get = async () => {
+            const response = await fetch("/api/bills/get", {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    team: teamId,
+                },
+            });
+            const data = await response.json();
+            setBills(data);
+        };
+        get();
+    }, [teamId]);
 
     return (
         <div>
@@ -35,52 +52,83 @@ const BillsDashboard = () => {
             <div className="mx-auto w-full lg:h-[calc(100vh-223px)] lg:flex">
                 <table className="lg:h-full border-r w-full lg:w-[25%] lg:min-w-[400px] text-sm max-h-[500px] lg:max-h-none overflow-y-auto">
                     <tbody>
-                        <tr
-                            className="flex py-4 px-3 border-b w-full text-left hover:bg-secondary/80 cursor-pointer"
-                            onClick={() =>
-                                setContent("clx5numem000008l0hqys2181")
-                            }
-                        >
-                            <td className="flex-grow">
-                                <div className="flex gap-2 items-center">
-                                    <TooltipProvider>
-                                        <Tooltip>
-                                            <TooltipTrigger asChild>
-                                                <Avatar className="h-8 w-8">
-                                                    <AvatarImage
-                                                        src="https://github.com/shadcn.png"
-                                                        alt="Daniel Castillo"
-                                                    />
-                                                    <AvatarFallback className="text-xs">
-                                                        DC
-                                                    </AvatarFallback>
-                                                </Avatar>
-                                            </TooltipTrigger>
-                                            <TooltipContent>
-                                                <p>Daniel Castillo</p>
-                                            </TooltipContent>
-                                        </Tooltip>
-                                    </TooltipProvider>
-                                    <div>
-                                        <h3 className="font-semibold">
-                                            clx5numem000008l0hqys2181
-                                        </h3>
-                                        <div className="flex gap-0.5 items-center">
-                                            <p>12 Mayo, 2024</p>
-                                            <Badge className="text-[11px] leading-3 px-1.5 bg-success-background text-success hover:text-success hover:bg-success-background">
-                                                Paid
-                                            </Badge>
+                        {bills?.map((bill) => (
+                            <tr
+                                className="flex py-4 px-3 border-b w-full text-left hover:bg-secondary/80 cursor-pointer"
+                                key={bill._id}
+                                onClick={() => setContent(bill._id)}
+                            >
+                                <td className="flex-grow">
+                                    <div className="flex gap-2 items-center">
+                                        <TooltipProvider>
+                                            <Tooltip>
+                                                <TooltipTrigger asChild>
+                                                    <Avatar className="h-8 w-8">
+                                                        {bill.recipient
+                                                            .photoUrl ? (
+                                                            <AvatarImage
+                                                                src={
+                                                                    bill
+                                                                        .recipient
+                                                                        .photoUrl
+                                                                }
+                                                                alt={
+                                                                    bill
+                                                                        .recipient
+                                                                        .name
+                                                                }
+                                                            />
+                                                        ) : null}
+                                                        <AvatarFallback className="text-xs">
+                                                            {
+                                                                bill.recipient
+                                                                    .name[0]
+                                                            }
+                                                        </AvatarFallback>
+                                                    </Avatar>
+                                                </TooltipTrigger>
+                                                <TooltipContent>
+                                                    <p>{bill.recipient.name}</p>
+                                                </TooltipContent>
+                                            </Tooltip>
+                                        </TooltipProvider>
+                                        <div>
+                                            <h3 className="font-semibold">
+                                                {bill.recipient.name}
+                                            </h3>
+                                            <div className="flex gap-0.5 items-center">
+                                                <p>
+                                                    {new Date(
+                                                        bill.emittedAt
+                                                    ).toLocaleDateString(
+                                                        "es-CO",
+                                                        {
+                                                            year: "numeric",
+                                                            month: "long",
+                                                            day: "numeric",
+                                                        }
+                                                    )}
+                                                </p>
+                                                <Badge className="text-[11px] leading-3 px-1.5 bg-success-background text-success hover:text-success hover:bg-success-background">
+                                                    {bill.status}
+                                                </Badge>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </td>
-                            <td className="w-auto">
-                                <h4 className="font-semibold">Total Due</h4>
-                                <div className="flex">
-                                    <p>$580.000</p>
-                                </div>
-                            </td>
-                        </tr>
+                                </td>
+                                <td className="w-auto">
+                                    <h4 className="font-semibold">Total</h4>
+                                    <div className="flex">
+                                        <p>
+                                            {toMoneyFormat(
+                                                bill.total,
+                                                bill.currency
+                                            )}
+                                        </p>
+                                    </div>
+                                </td>
+                            </tr>
+                        ))}
                     </tbody>
                 </table>
                 <div className="h-screen lg:h-full flex-grow overflow-x-auto">
@@ -103,8 +151,11 @@ const BillsDashboard = () => {
                         <NewBill />
                     ) : (
                         <div className="w-full relative pt-4">
-                            <BillOptions />
-                            <Bill />
+                            <BillOptions billId={content} />
+                            <iframe
+                                src={`/api/bill/${content}`}
+                                className="w-full aspect-[0.8] border rounded-lg mt-8 overflow-hidden"
+                            ></iframe>
                         </div>
                     )}
                 </div>

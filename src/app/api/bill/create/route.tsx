@@ -122,7 +122,7 @@ export const POST = async (req: Request) => {
             zip: contactInfo.zip,
         },
         status: "generated",
-        teamId: team,
+        teamId: new ObjectId(team),
         lang,
         currency,
         products: productsFormated,

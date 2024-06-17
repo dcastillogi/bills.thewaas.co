@@ -34,7 +34,6 @@ import {
 } from "@/components/ui/form";
 import { CURRENCIES, DOCUMENT_TYPES, LANGUAGES } from "@/lib/const";
 import { ScrollArea } from "../../ui/scroll-area";
-import { Label } from "../../ui/label";
 import { useEffect, useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
 
