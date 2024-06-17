@@ -286,7 +286,7 @@ const BillOptions = ({ billId }: { billId: string }) => {
                                                             <Input
                                                                 type="file"
                                                                 {...field}
-                                                                accept="application/pdf,.zip,.rar,.7zip"
+                                                                accept="application/pdf, .zip, .rar, .7zip"
                                                             />
                                                         </FormControl>
                                                         <FormMessage />
