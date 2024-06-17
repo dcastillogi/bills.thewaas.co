@@ -180,6 +180,7 @@ export const POST = async (req: Request) => {
             products: productsFormated,
             subtotal: total,
             total: total,
+            payments
         }
     );
 

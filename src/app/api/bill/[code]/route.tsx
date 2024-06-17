@@ -53,6 +53,7 @@ export const GET = async (req: Request) => {
                 products: bill.products,
                 subtotal: bill.subtotal,
                 total: bill.total,
+                payments: bill.payments,
             }}
         />
     );
@@ -108,6 +109,16 @@ const styles = StyleSheet.create({
         marginTop: 40,
         fontSize: 10,
         lineHeight: 1.5,
+    },
+    payments: {
+        marginTop: 10,
+        fontSize: 10,
+        lineHeight: 1.5,
+    },
+    payment: {
+        flexDirection: "row",
+        gap: 20,
+        marginTop: 5,
     },
     details: {
         flexDirection: "row",
@@ -210,10 +221,17 @@ const MyDocument = ({
         currency: string;
         subtotal: number;
         total: number;
+        payments: any[];
     };
 }) => (
     <Document>
-        <Page size="A4" style={{...styles.page, borderTop: `6px solid ${bill.issuer.color}`,}}>
+        <Page
+            size="A4"
+            style={{
+                ...styles.page,
+                borderTop: `6px solid ${bill.issuer.color}`,
+            }}
+        >
             <View style={styles.section}>
                 <View>
                     <Text style={styles.title}>Cuenta de Cobro</Text>
@@ -284,32 +302,61 @@ const MyDocument = ({
                                 <Text style={styles.semibold}>
                                     {product.title}
                                 </Text>
-                                {product.description && product.description.length > 1 && (
-                                    <Text style={styles.secondary}>
-                                        {product.description}
-                                    </Text>
-                                )}
+                                {product.description &&
+                                    product.description.length > 1 && (
+                                        <Text style={styles.secondary}>
+                                            {product.description}
+                                        </Text>
+                                    )}
                             </View>
                             <Text style={styles.col2}>{product.quantity}</Text>
-                            <Text style={styles.col3}>{toMoneyFormat(product.price, bill.currency)}</Text>
-                            <Text style={styles.col4}>{toMoneyFormat(product.price, bill.currency)}</Text>
+                            <Text style={styles.col3}>
+                                {toMoneyFormat(product.price, bill.currency)}
+                            </Text>
+                            <Text style={styles.col4}>
+                                {toMoneyFormat(product.total, bill.currency)}
+                            </Text>
                         </View>
                     ))}
                 </View>
                 <View style={styles.totalTable}>
                     <View style={styles.tableRow}>
                         <Text style={styles.col2}>Subtotal</Text>
-                        <Text style={styles.lastCol}>{toMoneyFormat(bill.subtotal, bill.currency)}</Text>
+                        <Text style={styles.lastCol}>
+                            {toMoneyFormat(bill.subtotal, bill.currency)}
+                        </Text>
                     </View>
                     <View style={{ ...styles.tableRow, ...styles.semibold }}>
                         <Text style={styles.col2}>Total</Text>
-                        <Text style={styles.lastCol}>{toMoneyFormat(bill.total, bill.currency)}</Text>
+                        <Text style={styles.lastCol}>
+                            {toMoneyFormat(bill.total, bill.currency)}
+                        </Text>
                     </View>
+                </View>
+                <View style={styles.payments}>
+                    {bill.payments.map((payment: any, index: number) => (
+                        <View
+                            style={styles.payment}
+                            key={`row-payment-${index}`}
+                        >
+                            <Text style={styles.semibold}>
+                                Pago {index + 1}{" "}
+                                ({new Date(payment.date).toLocaleDateString(
+                                    "es-CO"
+                                )})
+                                :
+                            </Text>
+                            <Text>
+                                {toMoneyFormat(payment.amount, bill.currency)}
+                            </Text>
+                        </View>
+                    ))}
                 </View>
             </View>
             <View style={styles.footer} fixed>
                 <Text>
-                    {bill._id} · {toMoneyFormat(bill.total, bill.currency)}. Generado por Bills by The Waas Co.
+                    {bill._id} · {toMoneyFormat(bill.total, bill.currency)}.
+                    Generado por Bills by The Waas Co.
                 </Text>
                 <Text
                     render={({ pageNumber, totalPages }) =>

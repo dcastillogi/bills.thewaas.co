@@ -124,8 +124,8 @@ const NewBill = () => {
             method: "POST",
             body: JSON.stringify({
                 ...values,
-                expiresAt: new Date(new Date(values.expiresAt + "T23:59:59Z").getTime() + new Date().getTimezoneOffset() * 60000).toISOString(),
-                createdAt: new Date(new Date(values.createdAt + "T00:00:00Z").getTime() + new Date().getTimezoneOffset() * 60000).toISOString(),
+                expiresAt: new Date(new Date(values.expiresAt).getTime() + new Date().getTimezoneOffset() * 60000).toISOString(),
+                createdAt: new Date(new Date(values.createdAt).getTime() + new Date().getTimezoneOffset() * 60000).toISOString(),
             }),            
             headers: {
                 team: pathname.split("/")[1],
