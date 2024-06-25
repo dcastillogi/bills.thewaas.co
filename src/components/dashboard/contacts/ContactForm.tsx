@@ -40,7 +40,7 @@ import { useToast } from "@/components/ui/use-toast";
 const formSchema = z.object({
     name: z.string().min(2),
     docType: z.enum(DOCUMENT_TYPES.map((doc) => doc.id) as any),
-    docNumber: z.string(),
+    docNumber: z.string().min(5),
     email: z.string().email(),
     phone: z
         .string()

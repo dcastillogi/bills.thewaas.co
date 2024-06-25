@@ -40,8 +40,8 @@ export const DOCUMENT_TYPES = [
         id: "NIT",
     },
     {
-        name: "N/A",
-        id: "NA",
+        name: "EIN",
+        id: "EIN",
     }
 ];
 

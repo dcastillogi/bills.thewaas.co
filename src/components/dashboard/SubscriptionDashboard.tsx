@@ -1,129 +1,63 @@
-import { Ellipsis } from "lucide-react";
+import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from "@/components/ui/table";
-
 import { Button } from "../ui/button";
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
-import SubscriptionForm from "./subscriptions/SubscriptionForm";
+import Payments from "./settings/Payments";
 
-const SubscriptionDashboard = ({
-    contacts,
-    teamId,
-}: {
-    contacts: any[];
-    teamId: string;
-}) => {
+export default function SubscriptionDashboard({ teamId }: { teamId: string }) {
     return (
         <div>
-            <div className="py-8 overflow-x-auto mb-4 bg-muted/40 border-b">
-                <div className="max-w-5xl px-8 mx-auto flex items-center justify-between">
-                    <div>
-                        <h2 className="text-3xl font-semibold tracking-tight">
-                            Suscripciones
-                        </h2>
+            <div className="w-full px-6 border-b py-8 bg-muted/40 overflow-x-auto">
+                <div className="max-w-6xl mx-auto">
+                    <h2 className="text-3xl font-semibold tracking-tight">
+                        Configuración
+                    </h2>
+                </div>
+            </div>
+            <div className="w-full lg:h-[calc(100vh-223px)] pl-4 pr-6">
+                <div className="max-w-6xl mx-auto lg:flex lg:gap-6 py-8">
+                    <div className="w-60">
+                        <h2 className="text-sm text-muted-foreground mb-3 px-3">Opciones</h2>
+                        <ul>
+                            <li>
+                                <Link href="#general">
+                                    <Button
+                                        variant="ghost"
+                                        size="sm"
+                                        className="w-full justify-start"
+                                    >
+                                        Suscripciones
+                                    </Button>
+                                </Link>
+                            </li>
+                            <li>
+                                <Link href="#payments">
+                                    <Button
+                                        variant="ghost"
+                                        size="sm"
+                                        className="w-full justify-start"
+                                    >
+                                        Planes
+                                    </Button>
+                                </Link>
+                            </li>
+                            <li>
+                                <Link href="#payments">
+                                    <Button
+                                        variant="ghost"
+                                        size="sm"
+                                        className="w-full justify-start"
+                                    >
+                                        Contactos
+                                    </Button>
+                                </Link>
+                            </li>
+                        </ul>
                     </div>
-                    <div className="flex items-center justify-end space-x-2 min-w-[600px]">
-                        <SubscriptionForm teamId={teamId} />
+                    <div className="flex-grow">
+                        
                     </div>
                 </div>
             </div>
-            <div className="max-w-5xl mx-auto w-full px-4 min-h-[calc(100vh-240px)] lg:flex pb-12">
-                <Table>
-                    <TableHeader>
-                        <TableRow>
-                            <TableHead className="w-[100px]">
-                                Información
-                            </TableHead>
-                            <TableHead>Celular</TableHead>
-                            <TableHead>Correo Electrónico</TableHead>
-                            <TableHead>Ciudad</TableHead>
-                            <TableHead></TableHead>
-                        </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                        {contacts.map((contact) => (
-                            <TableRow key={contact._id}>
-                                <TableCell>
-                                    <div className="flex items-center space-x-4">
-                                        <Avatar>
-                                            {contact.photoblobUrl ? (
-                                                <AvatarImage
-                                                    src={contact.photoblobUrl}
-                                                />
-                                            ) : null}
-                                            <AvatarFallback>
-                                                {contact.name[0]}
-                                            </AvatarFallback>
-                                        </Avatar>
-                                        <div className="text-nowrap">
-                                            <p className="text-sm font-medium leading-none">
-                                                {contact.name}
-                                            </p>
-                                            <p className="text-sm text-muted-foreground">
-                                                {contact.docType == "NIT"
-                                                    ? "Persona Jurídica"
-                                                    : "Persona Natural"}
-                                            </p>
-                                        </div>
-                                    </div>
-                                </TableCell>
-                                <TableCell>{contact.phone}</TableCell>
-                                <TableCell>{contact.email}</TableCell>
-                                <TableCell>
-                                    {contact.city.city +
-                                        ", " +
-                                        contact.city.country}
-                                </TableCell>
-                                <TableCell className="text-right">
-                                    <DropdownMenu>
-                                        <DropdownMenuTrigger asChild>
-                                            <Button
-                                                variant="ghost"
-                                                className="h-8 w-8 p-0 data-[state=open]:bg-muted"
-                                            >
-                                                <Ellipsis className="h-4 w-4" />
-                                                <span className="sr-only">
-                                                    Open menu
-                                                </span>
-                                            </Button>
-                                        </DropdownMenuTrigger>
-                                        <DropdownMenuContent
-                                            align="end"
-                                            className="w-[160px]"
-                                        >
-                                            <DropdownMenuItem>
-                                                Editar
-                                            </DropdownMenuItem>
-                                            <DropdownMenuItem>
-                                                Favorito
-                                            </DropdownMenuItem>
-                                            <DropdownMenuSeparator />
-                                            <DropdownMenuItem className="text-destructive">
-                                                Eliminar
-                                            </DropdownMenuItem>
-                                        </DropdownMenuContent>
-                                    </DropdownMenu>
-                                </TableCell>
-                            </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-            </div>
         </div>
     );
-};
-
-export default SubscriptionDashboard;
+}

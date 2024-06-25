@@ -127,7 +127,7 @@ export const POST = async (req: Request) => {
         },
         recipient: {
             contact: contact,
-            document: contactInfo.docType + (contactInfo.docNumber ? contactInfo.docNumber : ""),
+            document: contactInfo.docType + contactInfo.docNumber,
             name: contactInfo.name,
             email: contactInfo.email,
             phone: contactInfo.phone,
@@ -185,7 +185,7 @@ export const POST = async (req: Request) => {
             },
             recipient: {
                 contact: contact,
-                document: contactInfo.docType + (contactInfo.docNumber ? contactInfo.docNumber : ""),
+                document: contactInfo.docType + contactInfo.docNumber,
                 name: contactInfo.name,
                 email: contactInfo.email,
                 phone: contactInfo.phone,

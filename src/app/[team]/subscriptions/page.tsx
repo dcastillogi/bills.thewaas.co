@@ -7,7 +7,7 @@ export default async function Home({ params }: { params: { team: string } }) {
     const contacts = await getContacts(params.team);
     return (
         <Dashboard teamId={params.team}>
-            <SubscriptionDashboard teamId={params.team} contacts={contacts} />
+            <SubscriptionDashboard teamId={params.team} />
         </Dashboard>
     );
 }
