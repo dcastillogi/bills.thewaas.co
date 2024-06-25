@@ -50,8 +50,8 @@ const formSchema = z.object({
         .max(13, {
             message: "El número de celular debe tener 10 dígitos",
         }),
-    city: z.string().min(2),
-    state: z.string().min(2),
+    city: z.string().min(1),
+    state: z.string().min(1),
     country: z.string().min(2),
     address: z.string().min(5),
     zip: z.string().min(5).max(9),
