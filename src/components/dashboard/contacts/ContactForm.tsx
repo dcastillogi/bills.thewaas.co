@@ -92,7 +92,9 @@ const ContactForm = ({ teamId }: { teamId: string }) => {
     const { toast } = useToast();
 
     useEffect(() => {
-        fetch("/api/data/getCountries")
+        fetch("/api/data/getCountries", {
+            cache: "no-cache"
+        })
             .then((response) => {
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
