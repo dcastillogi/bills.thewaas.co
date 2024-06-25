@@ -32,6 +32,16 @@ export function MainNav({
                 Cuentas de Cobro
             </Link>
             <Link
+                href={`/${team}/subscriptions`}
+                className={cn({
+                    "text-sm font-medium text-muted-foreground transition-colors hover:text-primary":
+                        true,
+                    "text-primary": pathname.includes("subscriptions"),
+                })}
+            >
+                Suscripciones
+            </Link>
+            <Link
                 href={`/${team}/contacts`}
                 className={cn({
                     "text-sm font-medium text-muted-foreground transition-colors hover:text-primary":

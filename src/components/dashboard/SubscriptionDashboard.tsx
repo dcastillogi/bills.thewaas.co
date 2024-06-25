@@ -17,9 +17,9 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
-import ContactForm from "./contacts/ContactForm";
+import SubscriptionForm from "./subscriptions/SubscriptionForm";
 
-const ContactsDashboard = ({
+const SubscriptionDashboard = ({
     contacts,
     teamId,
 }: {
@@ -32,11 +32,11 @@ const ContactsDashboard = ({
                 <div className="max-w-5xl px-8 mx-auto flex items-center justify-between">
                     <div>
                         <h2 className="text-3xl font-semibold tracking-tight">
-                            Contactos
+                            Suscripciones
                         </h2>
                     </div>
                     <div className="flex items-center justify-end space-x-2 min-w-[600px]">
-                        <ContactForm teamId={teamId} />
+                        <SubscriptionForm teamId={teamId} />
                     </div>
                 </div>
             </div>
@@ -126,4 +126,4 @@ const ContactsDashboard = ({
     );
 };
 
-export default ContactsDashboard;
+export default SubscriptionDashboard;
