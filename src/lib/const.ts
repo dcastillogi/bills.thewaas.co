@@ -39,6 +39,10 @@ export const DOCUMENT_TYPES = [
         name: "NIT",
         id: "NIT",
     },
+    {
+        name: "N/A",
+        id: "NA",
+    }
 ];
 
 export const SIGN_SMS: Record<string, string> = {

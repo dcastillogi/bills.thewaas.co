@@ -54,7 +54,7 @@ export const POST = async (req: Request) => {
     const contacts = await db.collection("contacts");
 
     if (
-        await contacts.findOne({
+        docType != "NA" && await contacts.findOne({
             teamId: team,
             docType,
             docNumber,
@@ -75,7 +75,7 @@ export const POST = async (req: Request) => {
         teamId: new ObjectId(team),
         name,
         docType,
-        docNumber: docNumber.replace(".", ""),
+        docNumber: docNumber ? docNumber.replace(".", "") : undefined,
         email,
         phone,
         city: {
