@@ -52,7 +52,7 @@ export default function SettingsDashboard({ team }: { team: any }) {
                         </ul>
                     </div>
                     <div className="flex-grow">
-                        <Payments teamId={team._id} />
+                        <Payments teamId={team._id.toString()} />
                     </div>
                 </div>
             </div>
