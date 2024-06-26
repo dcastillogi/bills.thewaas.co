@@ -25,7 +25,6 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
-import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 
 const formSchema = z.object({
     name: z.string().min(2),
@@ -88,7 +87,7 @@ export default function SubscriptionForm() {
     return (
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)}>
-                <div className="space-y-4">
+                <div className="flex flex-col gap-4">
                     <FormField
                         control={form.control}
                         name="name"
@@ -376,122 +375,107 @@ export default function SubscriptionForm() {
                             )}
                         />
                     </div>
-                    <Card>
-                        <CardHeader>
-                            <CardTitle>Información de Pago</CardTitle>
-                        </CardHeader>
-                        <CardContent className="space-y-4">
-                            <FormField
-                                control={form.control}
-                                name="cardNumber"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>Número de Tarjeta</FormLabel>
-                                        <FormControl>
-                                            <Input
-                                                placeholder="4111 1111 1111 1111"
-                                                {...field}
-                                            />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-                            <div className="grid grid-cols-7 md:grid-cols-5 gap-4">
-                                <FormField
-                                    control={form.control}
-                                    name="expMonth"
-                                    render={({ field }) => (
-                                        <FormItem className="col-span-2 md:col-span-1">
-                                            <FormControl>
-                                                <Select
-                                                    onValueChange={
-                                                        field.onChange
-                                                    }
-                                                    defaultValue={field.value}
-                                                >
-                                                    <SelectTrigger>
-                                                        <SelectValue placeholder="MM" />
-                                                    </SelectTrigger>
-                                                    <SelectContent>
-                                                        {Array.from(
-                                                            { length: 12 },
-                                                            (_, i) => i + 1
-                                                        ).map(
-                                                            (month: number) => (
-                                                                <SelectItem
-                                                                    value={month.toString()}
-                                                                    key={`month-select-${month}`}
-                                                                >
-                                                                    {month}
-                                                                </SelectItem>
-                                                            )
-                                                        )}
-                                                    </SelectContent>
-                                                </Select>
-                                            </FormControl>
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
-                                />
-                                <FormField
-                                    control={form.control}
-                                    name="expYear"
-                                    render={({ field }) => (
-                                        <FormItem className="col-span-2 md:col-span-1">
-                                            <FormControl>
-                                                <Select
-                                                    onValueChange={
-                                                        field.onChange
-                                                    }
-                                                    defaultValue={field.value}
-                                                >
-                                                    <SelectTrigger>
-                                                        <SelectValue placeholder="YYYY" />
-                                                    </SelectTrigger>
-                                                    <SelectContent>
-                                                        {Array.from(
-                                                            { length: 7 },
-                                                            (_, i) =>
-                                                                i +
-                                                                new Date().getFullYear()
-                                                        ).map(
-                                                            (year: number) => (
-                                                                <SelectItem
-                                                                    value={year.toString()}
-                                                                    key={`year-select-${year}`}
-                                                                >
-                                                                    {year}
-                                                                </SelectItem>
-                                                            )
-                                                        )}
-                                                    </SelectContent>
-                                                </Select>
-                                            </FormControl>
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
-                                />
-                                <span></span>
-                                <FormField
-                                    control={form.control}
-                                    name="cvc"
-                                    render={({ field }) => (
-                                        <FormItem className="col-span-2">
-                                            <FormControl>
-                                                <Input
-                                                    placeholder="123"
-                                                    {...field}
-                                                />
-                                            </FormControl>
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
-                                />
-                            </div>
-                        </CardContent>
-                    </Card>
-                    <Button type="submit" className="w-full">Suscribirme</Button>
+                    <h2 className="text-2xl font-semibold tracking-tight mt-4">Información de pago</h2>
+                    <FormField
+                        control={form.control}
+                        name="cardNumber"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Número de Tarjeta</FormLabel>
+                                <FormControl>
+                                    <Input
+                                        placeholder="4111 1111 1111 1111"
+                                        {...field}
+                                    />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                    <div className="grid grid-cols-7 md:grid-cols-8 gap-4">
+                        <FormField
+                            control={form.control}
+                            name="expMonth"
+                            render={({ field }) => (
+                                <FormItem className="col-span-2 md:col-span-2">
+                                    <FormControl>
+                                        <Select
+                                            onValueChange={field.onChange}
+                                            defaultValue={field.value}
+                                        >
+                                            <SelectTrigger>
+                                                <SelectValue placeholder="MM" />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                {Array.from(
+                                                    { length: 12 },
+                                                    (_, i) => i + 1
+                                                ).map((month: number) => (
+                                                    <SelectItem
+                                                        value={month.toString()}
+                                                        key={`month-select-${month}`}
+                                                    >
+                                                        {month}
+                                                    </SelectItem>
+                                                ))}
+                                            </SelectContent>
+                                        </Select>
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="expYear"
+                            render={({ field }) => (
+                                <FormItem className="col-span-2 md:col-span-2">
+                                    <FormControl>
+                                        <Select
+                                            onValueChange={field.onChange}
+                                            defaultValue={field.value}
+                                        >
+                                            <SelectTrigger>
+                                                <SelectValue placeholder="YYYY" />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                {Array.from(
+                                                    { length: 7 },
+                                                    (_, i) =>
+                                                        i +
+                                                        new Date().getFullYear()
+                                                ).map((year: number) => (
+                                                    <SelectItem
+                                                        value={year.toString()}
+                                                        key={`year-select-${year}`}
+                                                    >
+                                                        {year}
+                                                    </SelectItem>
+                                                ))}
+                                            </SelectContent>
+                                        </Select>
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <span></span>
+                        <FormField
+                            control={form.control}
+                            name="cvc"
+                            render={({ field }) => (
+                                <FormItem className="col-span-3">
+                                    <FormControl>
+                                        <Input placeholder="123" {...field} />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                    </div>
+                    <Button type="submit" className="w-full mt-5">
+                        Suscribirme
+                    </Button>
                 </div>
             </form>
         </Form>

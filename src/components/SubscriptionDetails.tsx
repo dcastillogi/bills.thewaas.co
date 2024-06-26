@@ -15,7 +15,7 @@ export default function SubscriptionDetails() {
                         <Skeleton className="h-4 w-32" />
                     </div>
                 </div>
-                <Skeleton className="h-6 w-20 rounded" />
+                <Skeleton className="hidden sm:block h-6 w-20 rounded" />
             </div>
             <div className="mt-4 space-y-2">
                 {Array.from({ length: 4 }).map((_, i) => (
