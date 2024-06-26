@@ -23,7 +23,7 @@ export default function SubscriptionDetails() {
                 ))}
                 <Skeleton className="h-4 w-1/3" />
             </div>
-            <Separator className="my-4" />
+            <Separator className="my-6" />
             <div className="flex justify-between">
                 <Skeleton className="h-4 w-1/3" />
                 <Skeleton className="h-4 w-20" />
@@ -32,7 +32,7 @@ export default function SubscriptionDetails() {
                 <Skeleton className="h-4 w-1/3" />
                 <Skeleton className="h-4 w-20" />
             </div>
-            <Separator className="my-4" />
+            <Separator className="my-6" />
             <div className="flex justify-between">
                 <Skeleton className="h-5 w-1/3" />
                 <Skeleton className="h-5 w-20" />
