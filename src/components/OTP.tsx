@@ -68,6 +68,7 @@ const OTP = ({ email }: { email: string }) => {
             headers: {
                 "Content-Type": "application/json",
             },
+            cache: "no-cache",
             body: JSON.stringify(data),
         });
         if (response.ok) {

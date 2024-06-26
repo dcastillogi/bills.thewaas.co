@@ -46,9 +46,19 @@ export const getTeams = async (userId: string) => {
     return await teamsList.toArray();
 };
 
-export const getContacts = async (teamId: string) => {
+export const getContacts = async (teamId: string, userId: string) => {
     const client = await clientPromise;
     const db = await client.db("main");
+    const teams = await db.collection("teams");
+    const team = await teams.findOne({
+        userId: new ObjectId(userId),
+        _id: new ObjectId(teamId),
+    });
+
+    if (!team) {
+        return false;
+    }
+
     const contacts = await db.collection("contacts");
 
     const contactsList = await contacts.find(

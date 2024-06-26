@@ -93,7 +93,7 @@ const ContactForm = ({ teamId }: { teamId: string }) => {
 
     useEffect(() => {
         fetch("/api/data/getCountries", {
-            cache: "no-cache"
+            cache: "no-cache",
         })
             .then((response) => {
                 if (!response.ok) {
@@ -173,6 +173,83 @@ const ContactForm = ({ teamId }: { teamId: string }) => {
                                 </DialogDescription>
                             </DialogHeader>
                             <div className="space-y-4 py-4">
+                                <FormField
+                                    control={form.control}
+                                    name="country"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>País</FormLabel>
+                                            <FormControl>
+                                                <Select
+                                                    onValueChange={(
+                                                        value: string
+                                                    ) => {
+                                                        setStates([]);
+                                                        setCountrySelected(
+                                                            value
+                                                        );
+                                                        fetch(
+                                                            `/api/data/getStates?country=${value}`
+                                                        )
+                                                            .then(
+                                                                (response) => {
+                                                                    if (
+                                                                        !response.ok
+                                                                    ) {
+                                                                        throw new Error(
+                                                                            `HTTP error! status: ${response.status}`
+                                                                        );
+                                                                    }
+                                                                    return response.json();
+                                                                }
+                                                            )
+                                                            .then((data) => {
+                                                                field.onChange(
+                                                                    value
+                                                                );
+                                                                setStates(data);
+                                                            })
+                                                            .catch((error) => {
+                                                                toast({
+                                                                    title: "¡Oh no! Algo salió mal",
+                                                                    description:
+                                                                        "No pudimos cargar los departamentos disponibles",
+                                                                });
+                                                            });
+                                                    }}
+                                                >
+                                                    <SelectTrigger id="select-country">
+                                                        <SelectValue
+                                                            placeholder={
+                                                                countries.length >
+                                                                0
+                                                                    ? "--Seleccionar"
+                                                                    : "Cargando..."
+                                                            }
+                                                        />
+                                                    </SelectTrigger>
+                                                    <SelectContent>
+                                                        {countries.map(
+                                                            (country: any) => (
+                                                                <SelectItem
+                                                                    value={
+                                                                        country.code
+                                                                    }
+                                                                    key={`country-select-${country.code}`}
+                                                                >
+                                                                    {
+                                                                        country.name
+                                                                    }
+                                                                </SelectItem>
+                                                            )
+                                                        )}
+                                                    </SelectContent>
+                                                </Select>
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
                                 <div className="grid sm:grid-cols-6 gap-4">
                                     <FormField
                                         control={form.control}
@@ -193,7 +270,7 @@ const ContactForm = ({ teamId }: { teamId: string }) => {
                                                             <SelectValue placeholder="--Seleccionar" />
                                                         </SelectTrigger>
                                                         <SelectContent>
-                                                            {DOCUMENT_TYPES.map(
+                                                            {DOCUMENT_TYPES.filter((doc) => !countrySelected || doc.country == countrySelected).map(
                                                                 (type) => (
                                                                     <SelectItem
                                                                         value={
@@ -352,93 +429,6 @@ const ContactForm = ({ teamId }: { teamId: string }) => {
                                 <div className="grid grid-cols-2 gap-4">
                                     <FormField
                                         control={form.control}
-                                        name="country"
-                                        render={({ field }) => (
-                                            <FormItem>
-                                                <FormLabel>País</FormLabel>
-                                                <FormControl>
-                                                    <Select
-                                                        onValueChange={(
-                                                            value: string
-                                                        ) => {
-                                                            setStates([]);
-                                                            setCountrySelected(
-                                                                value
-                                                            );
-                                                            fetch(
-                                                                `/api/data/getStates?country=${value}`
-                                                            )
-                                                                .then(
-                                                                    (
-                                                                        response
-                                                                    ) => {
-                                                                        if (
-                                                                            !response.ok
-                                                                        ) {
-                                                                            throw new Error(
-                                                                                `HTTP error! status: ${response.status}`
-                                                                            );
-                                                                        }
-                                                                        return response.json();
-                                                                    }
-                                                                )
-                                                                .then(
-                                                                    (data) => {
-                                                                        field.onChange(
-                                                                            value
-                                                                        );
-                                                                        setStates(
-                                                                            data
-                                                                        );
-                                                                    }
-                                                                )
-                                                                .catch(
-                                                                    (error) => {
-                                                                        toast({
-                                                                            title: "¡Oh no! Algo salió mal",
-                                                                            description:
-                                                                                "No pudimos cargar los departamentos disponibles",
-                                                                        });
-                                                                    }
-                                                                );
-                                                        }}
-                                                    >
-                                                        <SelectTrigger id="select-country">
-                                                            <SelectValue
-                                                                placeholder={
-                                                                    countries.length >
-                                                                    0
-                                                                        ? "--Seleccionar"
-                                                                        : "Cargando..."
-                                                                }
-                                                            />
-                                                        </SelectTrigger>
-                                                        <SelectContent>
-                                                            {countries.map(
-                                                                (
-                                                                    country: any
-                                                                ) => (
-                                                                    <SelectItem
-                                                                        value={
-                                                                            country.code
-                                                                        }
-                                                                        key={`country-select-${country.code}`}
-                                                                    >
-                                                                        {
-                                                                            country.name
-                                                                        }
-                                                                    </SelectItem>
-                                                                )
-                                                            )}
-                                                        </SelectContent>
-                                                    </Select>
-                                                </FormControl>
-                                                <FormMessage />
-                                            </FormItem>
-                                        )}
-                                    />
-                                    <FormField
-                                        control={form.control}
                                         name="state"
                                         render={({ field }) => (
                                             <FormItem>
@@ -524,50 +514,55 @@ const ContactForm = ({ teamId }: { teamId: string }) => {
                                             </FormItem>
                                         )}
                                     />
+                                    <FormField
+                                        control={form.control}
+                                        name="city"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel>Ciudad</FormLabel>
+                                                <FormControl>
+                                                    <Select
+                                                        onValueChange={
+                                                            field.onChange
+                                                        }
+                                                        defaultValue={
+                                                            field.value
+                                                        }
+                                                    >
+                                                        <SelectTrigger>
+                                                            <SelectValue
+                                                                placeholder={
+                                                                    cities.length >
+                                                                    0
+                                                                        ? "--Seleccionar"
+                                                                        : "Elegir Departamento"
+                                                                }
+                                                            />
+                                                        </SelectTrigger>
+                                                        <SelectContent>
+                                                            {cities.map(
+                                                                (city: any) => (
+                                                                    <SelectItem
+                                                                        value={
+                                                                            city.code
+                                                                        }
+                                                                        key={`cities-option-${city.code}`}
+                                                                    >
+                                                                        {
+                                                                            city.name
+                                                                        }
+                                                                    </SelectItem>
+                                                                )
+                                                            )}
+                                                        </SelectContent>
+                                                    </Select>
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
                                 </div>
-                                <FormField
-                                    control={form.control}
-                                    name="city"
-                                    render={({ field }) => (
-                                        <FormItem>
-                                            <FormLabel>Ciudad</FormLabel>
-                                            <FormControl>
-                                                <Select
-                                                    onValueChange={
-                                                        field.onChange
-                                                    }
-                                                    defaultValue={field.value}
-                                                >
-                                                    <SelectTrigger>
-                                                        <SelectValue
-                                                            placeholder={
-                                                                cities.length >
-                                                                0
-                                                                    ? "--Seleccionar"
-                                                                    : "Elegir Departamento"
-                                                            }
-                                                        />
-                                                    </SelectTrigger>
-                                                    <SelectContent>
-                                                        {cities.map(
-                                                            (city: any) => (
-                                                                <SelectItem
-                                                                    value={
-                                                                        city.code
-                                                                    }
-                                                                    key={`cities-option-${city.code}`}
-                                                                >
-                                                                    {city.name}
-                                                                </SelectItem>
-                                                            )
-                                                        )}
-                                                    </SelectContent>
-                                                </Select>
-                                            </FormControl>
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
-                                />
+
                                 <div className="grid grid-cols-2 gap-4">
                                     <FormField
                                         control={form.control}

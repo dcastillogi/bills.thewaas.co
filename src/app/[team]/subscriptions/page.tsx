@@ -1,13 +1,21 @@
 import Dashboard from "@/components/Dashboard";
 import SubscriptionDashboard from "@/components/dashboard/SubscriptionDashboard";
-import { getContacts } from "@/lib/actions";
+import { getSession } from "@/lib/session";
+import { redirect } from "next/navigation";
 
 
 export default async function Home({ params }: { params: { team: string } }) {
-    const contacts = await getContacts(params.team);
+    const { session } = await getSession(false);
+    if (!session.isLoggedIn) {
+        redirect("/")
+    }
     return (
         <Dashboard teamId={params.team}>
-            <SubscriptionDashboard teamId={params.team} />
+            <SubscriptionDashboard teamId={params.team}>
+                <div>
+                    
+                </div>
+            </SubscriptionDashboard>
         </Dashboard>
     );
 }

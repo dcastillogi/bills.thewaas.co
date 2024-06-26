@@ -29,6 +29,7 @@ const BillsDashboard = ({ teamId }: { teamId: string }) => {
                     "Content-Type": "application/json",
                     team: teamId,
                 },
+                cache: "no-cache",
             });
             const data = await response.json();
             setBills(data);

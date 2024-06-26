@@ -75,6 +75,7 @@ const SignVerify = ({
             headers: {
                 "Content-Type": "application/json",
             },
+            cache: "no-cache",
             body: JSON.stringify({ ...data, billId: billId }),
         });
         if (response.ok) {

@@ -46,7 +46,9 @@ export default function ContactSelector(
     React.useEffect(() => {
         const team = pathname.split("/")[1];
 
-        fetch(`/api/contacts/get?team=${team}`)
+        fetch(`/api/contacts/get?team=${team}`, {
+            cache: "no-cache",
+        })
             .then((res) => res.json())
             .then((data) => {
                 setContacts(data);

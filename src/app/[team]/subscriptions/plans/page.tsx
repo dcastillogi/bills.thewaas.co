@@ -1,9 +1,10 @@
 import Dashboard from "@/components/Dashboard";
-import SettingsDashboard from "@/components/dashboard/SettingsDashboard";
+import SubscriptionDashboard from "@/components/dashboard/SubscriptionDashboard";
+import PlanList from "@/components/dashboard/subscriptions/PlanList";
 import { getSession } from "@/lib/session";
 import { redirect } from "next/navigation";
 
-export default async function Settings({
+export default async function PlanPage({
     params,
 }: {
     params: { team: string };
@@ -14,7 +15,9 @@ export default async function Settings({
     }
     return (
         <Dashboard teamId={params.team}>
-            <SettingsDashboard team={params.team} />
+            <SubscriptionDashboard teamId={params.team}>
+                <PlanList teamId={params.team} />
+            </SubscriptionDashboard>
         </Dashboard>
     );
 }

@@ -26,24 +26,41 @@ export const DOCUMENT_TYPES = [
     {
         name: "Cédula de ciudadanía",
         id: "CC",
+        country: "CO",
     },
     {
         name: "Cédula de extranjería",
         id: "CE",
+        country: "CO",
     },
     {
         name: "Pasaporte",
         id: "PA",
+        country: "CO",
     },
     {
         name: "NIT",
         id: "NIT",
+        country: "CO",
     },
     {
         name: "EIN",
         id: "EIN",
-    }
+        country: "US",
+    },
+    {
+        name: "SSN",
+        id: "SSN",
+        country: "US",
+    },
 ];
+
+export const SUBSCRIPTION_INTERVALS = [
+    {
+        name: "Mensual",
+        id: "month"
+    }
+]
 
 export const SIGN_SMS: Record<string, string> = {
     "ES": "Su código para aceptar la CUENTA DE COBRO No. ****{id} es: {code}",

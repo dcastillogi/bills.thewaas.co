@@ -6,7 +6,6 @@ import { Loader2, PenLine } from "lucide-react";
 import { Dialog } from "@/components/ui/dialog";
 import { useRef, useState } from "react";
 import HCaptcha from "@hcaptcha/react-hcaptcha";
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { usePathname } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast";
 import SignVerify from "@/components/SignVerify";
