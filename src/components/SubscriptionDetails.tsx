@@ -77,7 +77,7 @@ export default function SubscriptionDetails({
                     )}
                 </p>
             </div>
-            <p className="text-sm mt-3 text-muted-foreground">
+            <p className="text-sm mt-10 text-muted-foreground">
                 Si tienes alguna duda, no dudes en{" "}
                 <a
                     href={`https://api.whatsapp.com/send/?phone=${subscription.team.info.phone}&text=${encodeURIComponent("Hola, tengo una duda sobre mi suscripción No. " + subscription._id)}`}
