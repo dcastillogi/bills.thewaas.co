@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 };
 
 export default async function SubscriptionPage({
-    params
+    params,
 }: {
     params: { number: string };
 }) {
@@ -21,9 +21,14 @@ export default async function SubscriptionPage({
         <div className="lg:flex lg:justify-end lg:overflow-y-auto lg:items-start">
             <div className="lg:w-1/2 px-6 pb-6 lg:pb-10 pt-12 bg-muted/30 top-0 left-0 lg:fixed lg:h-screen">
                 <div className="max-w-lg mx-auto">
-                    <h1 className="text-3xl font-semibold tracking-tight mb-6">
-                        Suscripción
-                    </h1>
+                    <div className="sm:flex justify-between items-center mb-6">
+                        <h1 className="text-3xl font-semibold tracking-tight">
+                            Suscripción
+                        </h1>
+                        <p className="text-sm text-muted-foreground">
+                            No. {subscription._id.toString()}
+                        </p>
+                    </div>
                     <SubscriptionDetails subscription={subscription} />
                 </div>
             </div>

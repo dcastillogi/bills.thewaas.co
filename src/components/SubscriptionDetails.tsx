@@ -64,7 +64,7 @@ export default function SubscriptionDetails({
                     {toMoneyFormat(
                         subscription.plan.amount,
                         subscription.plan.currency
-                    )}
+                    )}/mes
                 </p>
             </div>
             <Separator className="my-4" />
@@ -74,7 +74,7 @@ export default function SubscriptionDetails({
                     {toMoneyFormat(
                         subscription.plan.amount,
                         subscription.plan.currency
-                    )}
+                    )}/mes
                 </p>
             </div>
             <p className="text-sm mt-10 text-muted-foreground">

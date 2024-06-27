@@ -37,9 +37,9 @@ import { useRef, useState } from "react";
 import { LockClosedIcon } from "@radix-ui/react-icons";
 
 const formSchema = z.object({
-    name: z.string().min(2),
-    lastName: z.string().min(2),
-    email: z.string().email(),
+    name: z.string({message: "Debes ingresar un nombre"}).min(2, {message: "Debes ingresar un nombre válido"}),
+    lastName: z.string({message: "Debes ingresar un apellido"}).min(2, {message: "Debes ingresar un apellido válido"}),
+    email: z.string({message: "Debes ingresar un correo electrónico"}).email({message: "Debes ingresar un correo válido"}),
     phone: z
         .string()
         .min(11, {
@@ -49,8 +49,8 @@ const formSchema = z.object({
             message: "El número de celular debe tener 10 dígitos",
         }),
     city: z.string().min(1),
-    address: z.string().min(5),
-    cardNumber: z.string().min(16).max(16),
+    address: z.string({message: "Debes ingresar una dirección"}).min(5, {message: "Debes ingresar una dirección válida"}),
+    cardNumber: z.string().min(16).max(19),
     expMonth: z.string().min(1).max(2),
     expYear: z.string().min(4).max(4),
     cvc: z.string().min(3).max(4),
@@ -65,7 +65,16 @@ export default function SubscriptionForm() {
     const { toast } = useToast();
 
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
+        if (!token) {
+            hCaptchaRef.current?.execute();
+            return;
+        }
+        
+        console.log(values);
 
+        hCaptchaRef.current?.resetCaptcha();
+        setToken(null);
+        form.reset();
     };
 
     return (
@@ -178,7 +187,7 @@ export default function SubscriptionForm() {
                                 <FormItem className="md:col-span-2">
                                     <FormLabel>Ciudad</FormLabel>
                                     <FormControl>
-                                        <Input placeholder="03483" {...field} />
+                                        <Input placeholder="Bogotá" {...field} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -301,6 +310,12 @@ export default function SubscriptionForm() {
                     <HCaptcha
                         sitekey="d94e78ec-a5ee-4204-adca-376cfa3ac354"
                         size="invisible"
+                        ref={hCaptchaRef}
+                        onVerify={(token: string) => {
+                            setToken(token);
+                            form.handleSubmit(onSubmit)();
+                        }}
+                        onExpire={() => setToken(null)}
                     />
                     <Button type="submit" className="w-full mt-1">
                         Suscribirme ($7 USD/mes)
