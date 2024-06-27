@@ -49,7 +49,7 @@ export const DOCUMENT_TYPES = [
         country: "US",
     },
     {
-        name: "SSN",
+        name: "Social Security Number",
         id: "SSN",
         country: "US",
     },

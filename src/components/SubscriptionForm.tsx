@@ -1,15 +1,14 @@
+"use client";
+
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { DOCUMENT_TYPES } from "@/lib/const";
 import { useForm } from "react-hook-form";
-import { useEffect, useState } from "react";
 import { useToast } from "./ui/use-toast";
 
 import {
     Form,
     FormControl,
-    FormDescription,
     FormField,
     FormItem,
     FormLabel,
@@ -25,11 +24,21 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
+import { Separator } from "./ui/separator";
+import HCaptcha from "@hcaptcha/react-hcaptcha";
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+} from "./ui/card";
+import { Avatar, AvatarFallback } from "./ui/avatar";
+import { LockClosedIcon } from "@radix-ui/react-icons";
 
 const formSchema = z.object({
     name: z.string().min(2),
-    docType: z.enum(DOCUMENT_TYPES.map((doc) => doc.id) as any),
-    docNumber: z.string().min(5),
+    lastName: z.string().min(2),
     email: z.string().email(),
     phone: z
         .string()
@@ -40,10 +49,7 @@ const formSchema = z.object({
             message: "El número de celular debe tener 10 dígitos",
         }),
     city: z.string().min(1),
-    state: z.string().min(1),
-    country: z.string().min(2),
     address: z.string().min(5),
-    zip: z.string().min(5).max(9),
     cardNumber: z.string().min(16).max(16),
     expMonth: z.string().min(1).max(2),
     expYear: z.string().min(4).max(4),
@@ -51,56 +57,64 @@ const formSchema = z.object({
 });
 
 export default function SubscriptionForm() {
-    const [countries, setCountries] = useState([]);
-    const [states, setStates] = useState([]);
-    const [cities, setCities] = useState([]);
-    const [countrySelected, setCountrySelected] = useState("");
-
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
     });
     const { toast } = useToast();
-
-    useEffect(() => {
-        fetch("/api/data/getCountries", {
-            cache: "no-cache",
-        })
-            .then((response) => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                return response.json();
-            })
-            .then((data) => {
-                setCountries(data);
-            })
-            .catch((error) => {
-                toast({
-                    title: "¡Oh no! Algo salió mal",
-                    description: "No pudimos cargar los países disponibles",
-                });
-            });
-    }, [toast]);
 
     const onSubmit = async (values: z.infer<typeof formSchema>) => {};
 
     return (
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)}>
+                <Card className="mb-5 p-3">
+                    <div className="flex justify-between gap-2">
+                        <div className="flex items-center gap-3">
+                            <Avatar>
+                                <AvatarFallback>S</AvatarFallback>
+                            </Avatar>
+                            <div className="text-left">
+                                <p className="text-sm font-medium leading-none">
+                                    Sofia Davis
+                                </p>
+                                <p className="text-sm text-muted-foreground">
+                                    m@example.com
+                                </p>
+                            </div>
+                        </div>
+                        <Button variant="outline">Usar</Button>
+                    </div>
+                </Card>
                 <div className="flex flex-col gap-4">
-                    <FormField
-                        control={form.control}
-                        name="name"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Nombre Completo</FormLabel>
-                                <FormControl>
-                                    <Input placeholder="John Doe" {...field} />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
+                    <div className="grid sm:grid-cols-2 gap-4">
+                        <FormField
+                            control={form.control}
+                            name="name"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Nombre (s)</FormLabel>
+                                    <FormControl>
+                                        <Input placeholder="John" {...field} />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="lastName"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Apellido (s)</FormLabel>
+                                    <FormControl>
+                                        <Input placeholder="Doe" {...field} />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                    </div>
+
                     <FormField
                         control={form.control}
                         name="email"
@@ -152,10 +166,10 @@ export default function SubscriptionForm() {
                         />
                         <FormField
                             control={form.control}
-                            name="zip"
+                            name="city"
                             render={({ field }) => (
                                 <FormItem className="md:col-span-2">
-                                    <FormLabel>Código Postal</FormLabel>
+                                    <FormLabel>Ciudad</FormLabel>
                                     <FormControl>
                                         <Input placeholder="03483" {...field} />
                                     </FormControl>
@@ -164,218 +178,10 @@ export default function SubscriptionForm() {
                             )}
                         />
                     </div>
-                    <FormField
-                        control={form.control}
-                        name="country"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>País</FormLabel>
-                                <FormControl>
-                                    <Select
-                                        onValueChange={(value: string) => {
-                                            setStates([]);
-                                            setCountrySelected(value);
-                                            fetch(
-                                                `/api/data/getStates?country=${value}`
-                                            )
-                                                .then((response) => {
-                                                    if (!response.ok) {
-                                                        throw new Error(
-                                                            `HTTP error! status: ${response.status}`
-                                                        );
-                                                    }
-                                                    return response.json();
-                                                })
-                                                .then((data) => {
-                                                    field.onChange(value);
-                                                    setStates(data);
-                                                })
-                                                .catch((error) => {
-                                                    toast({
-                                                        title: "¡Oh no! Algo salió mal",
-                                                        description:
-                                                            "No pudimos cargar los departamentos disponibles",
-                                                    });
-                                                });
-                                        }}
-                                    >
-                                        <SelectTrigger id="select-country">
-                                            <SelectValue
-                                                placeholder={
-                                                    countries.length > 0
-                                                        ? "--Seleccionar"
-                                                        : "Cargando..."
-                                                }
-                                            />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            {countries.map((country: any) => (
-                                                <SelectItem
-                                                    value={country.code}
-                                                    key={`country-select-${country.code}`}
-                                                >
-                                                    {country.name}
-                                                </SelectItem>
-                                            ))}
-                                        </SelectContent>
-                                    </Select>
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                    <div className="grid sm:grid-cols-2 gap-4">
-                        <FormField
-                            control={form.control}
-                            name="state"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Departamento</FormLabel>
-                                    <FormControl>
-                                        <Select
-                                            onValueChange={(value: string) => {
-                                                setCities([]);
-                                                fetch(
-                                                    `/api/data/getCities?country=${countrySelected}&state=${value}`
-                                                )
-                                                    .then((response) => {
-                                                        if (!response.ok) {
-                                                            throw new Error(
-                                                                `HTTP error! status: ${response.status}`
-                                                            );
-                                                        }
-                                                        return response.json();
-                                                    })
-                                                    .then((data) => {
-                                                        field.onChange(value);
-                                                        setCities(data);
-                                                    })
-                                                    .catch((error) => {
-                                                        toast({
-                                                            title: "¡Oh no! Algo salió mal",
-                                                            description:
-                                                                "No pudimos cargar las ciudades disponibles",
-                                                        });
-                                                    });
-                                            }}
-                                        >
-                                            <SelectTrigger>
-                                                <SelectValue
-                                                    id="select-state"
-                                                    placeholder={
-                                                        states.length > 0
-                                                            ? "--Seleccionar"
-                                                            : "Elegir País..."
-                                                    }
-                                                />
-                                            </SelectTrigger>
-                                            <SelectContent>
-                                                {states.map((state: any) => (
-                                                    <SelectItem
-                                                        value={state.code}
-                                                        key={`state-select-${state.code}`}
-                                                    >
-                                                        {state.name}
-                                                    </SelectItem>
-                                                ))}
-                                            </SelectContent>
-                                        </Select>
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={form.control}
-                            name="city"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Ciudad</FormLabel>
-                                    <FormControl>
-                                        <Select
-                                            onValueChange={field.onChange}
-                                            defaultValue={field.value}
-                                        >
-                                            <SelectTrigger>
-                                                <SelectValue
-                                                    placeholder={
-                                                        cities.length > 0
-                                                            ? "--Seleccionar"
-                                                            : "Elegir Departamento"
-                                                    }
-                                                />
-                                            </SelectTrigger>
-                                            <SelectContent>
-                                                {cities.map((city: any) => (
-                                                    <SelectItem
-                                                        value={city.code}
-                                                        key={`cities-option-${city.code}`}
-                                                    >
-                                                        {city.name}
-                                                    </SelectItem>
-                                                ))}
-                                            </SelectContent>
-                                        </Select>
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                    </div>
-                    <div className="grid sm:grid-cols-6 gap-4">
-                        <FormField
-                            control={form.control}
-                            name="docType"
-                            render={({ field }) => (
-                                <FormItem className="sm:col-span-2">
-                                    <FormLabel>Tipo</FormLabel>
-                                    <FormControl>
-                                        <Select
-                                            onValueChange={field.onChange}
-                                            defaultValue={field.value}
-                                        >
-                                            <SelectTrigger>
-                                                <SelectValue placeholder="--Seleccionar" />
-                                            </SelectTrigger>
-                                            <SelectContent>
-                                                {DOCUMENT_TYPES.filter(
-                                                    (doc) =>
-                                                        !countrySelected ||
-                                                        doc.country ==
-                                                            countrySelected
-                                                ).map((type) => (
-                                                    <SelectItem
-                                                        value={type.id}
-                                                        key={`type-select-${type.id}`}
-                                                    >
-                                                        {type.name}
-                                                    </SelectItem>
-                                                ))}
-                                            </SelectContent>
-                                        </Select>
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={form.control}
-                            name="docNumber"
-                            render={({ field }) => (
-                                <FormItem className="sm:col-span-4">
-                                    <FormLabel>Número de Documento</FormLabel>
-                                    <FormControl>
-                                        <Input
-                                            placeholder="100239247"
-                                            {...field}
-                                        />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                    </div>
-                    <h2 className="text-2xl font-semibold tracking-tight mt-4">Información de pago</h2>
+                    <Separator className="mt-4 mb-1" />
+                    <h2 className="text-2xl font-semibold tracking-tight mb-2">
+                        Información de pago
+                    </h2>
                     <FormField
                         control={form.control}
                         name="cardNumber"
@@ -392,79 +198,92 @@ export default function SubscriptionForm() {
                             </FormItem>
                         )}
                     />
-                    <div className="grid grid-cols-7 md:grid-cols-8 gap-4">
-                        <FormField
-                            control={form.control}
-                            name="expMonth"
-                            render={({ field }) => (
-                                <FormItem className="col-span-2 md:col-span-2">
-                                    <FormControl>
-                                        <Select
-                                            onValueChange={field.onChange}
-                                            defaultValue={field.value}
-                                        >
-                                            <SelectTrigger>
-                                                <SelectValue placeholder="MM" />
-                                            </SelectTrigger>
-                                            <SelectContent>
-                                                {Array.from(
-                                                    { length: 12 },
-                                                    (_, i) => i + 1
-                                                ).map((month: number) => (
-                                                    <SelectItem
-                                                        value={month.toString()}
-                                                        key={`month-select-${month}`}
-                                                    >
-                                                        {month}
-                                                    </SelectItem>
-                                                ))}
-                                            </SelectContent>
-                                        </Select>
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={form.control}
-                            name="expYear"
-                            render={({ field }) => (
-                                <FormItem className="col-span-2 md:col-span-2">
-                                    <FormControl>
-                                        <Select
-                                            onValueChange={field.onChange}
-                                            defaultValue={field.value}
-                                        >
-                                            <SelectTrigger>
-                                                <SelectValue placeholder="YYYY" />
-                                            </SelectTrigger>
-                                            <SelectContent>
-                                                {Array.from(
-                                                    { length: 7 },
-                                                    (_, i) =>
-                                                        i +
-                                                        new Date().getFullYear()
-                                                ).map((year: number) => (
-                                                    <SelectItem
-                                                        value={year.toString()}
-                                                        key={`year-select-${year}`}
-                                                    >
-                                                        {year}
-                                                    </SelectItem>
-                                                ))}
-                                            </SelectContent>
-                                        </Select>
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <span></span>
+                    <div className="grid grid-cols-3 gap-4">
+                        <div className="col-span-2">
+                            <FormLabel>Fecha de expiración</FormLabel>
+                            <div className="grid grid-cols-2 gap-4 mt-2">
+                                <FormField
+                                    control={form.control}
+                                    name="expMonth"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormControl>
+                                                <Select
+                                                    onValueChange={
+                                                        field.onChange
+                                                    }
+                                                    defaultValue={field.value}
+                                                >
+                                                    <SelectTrigger>
+                                                        <SelectValue placeholder="MM" />
+                                                    </SelectTrigger>
+                                                    <SelectContent>
+                                                        {Array.from(
+                                                            { length: 12 },
+                                                            (_, i) => i + 1
+                                                        ).map(
+                                                            (month: number) => (
+                                                                <SelectItem
+                                                                    value={month.toString()}
+                                                                    key={`month-select-${month}`}
+                                                                >
+                                                                    {month}
+                                                                </SelectItem>
+                                                            )
+                                                        )}
+                                                    </SelectContent>
+                                                </Select>
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    control={form.control}
+                                    name="expYear"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormControl>
+                                                <Select
+                                                    onValueChange={
+                                                        field.onChange
+                                                    }
+                                                    defaultValue={field.value}
+                                                >
+                                                    <SelectTrigger>
+                                                        <SelectValue placeholder="YYYY" />
+                                                    </SelectTrigger>
+                                                    <SelectContent>
+                                                        {Array.from(
+                                                            { length: 7 },
+                                                            (_, i) =>
+                                                                i +
+                                                                new Date().getFullYear()
+                                                        ).map(
+                                                            (year: number) => (
+                                                                <SelectItem
+                                                                    value={year.toString()}
+                                                                    key={`year-select-${year}`}
+                                                                >
+                                                                    {year}
+                                                                </SelectItem>
+                                                            )
+                                                        )}
+                                                    </SelectContent>
+                                                </Select>
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                            </div>
+                        </div>
                         <FormField
                             control={form.control}
                             name="cvc"
                             render={({ field }) => (
-                                <FormItem className="col-span-3">
+                                <FormItem>
+                                    <FormLabel>CVC</FormLabel>
                                     <FormControl>
                                         <Input placeholder="123" {...field} />
                                     </FormControl>
@@ -473,9 +292,17 @@ export default function SubscriptionForm() {
                             )}
                         />
                     </div>
-                    <Button type="submit" className="w-full mt-5">
-                        Suscribirme
+                    <Separator className="mt-3 mb-2" />
+                    <HCaptcha sitekey="d94e78ec-a5ee-4204-adca-376cfa3ac354" />
+                    <Button type="submit" className="w-full mt-1">
+                        Suscribirme ($7 USD/mes)
                     </Button>
+                    <div className="flex justify-center gap-2 -mt-2 items-center">
+                        <LockClosedIcon className="w-4 h-4 text-muted-foreground" />
+                        <p className="text-muted-foreground text-sm font-medium">
+                            Pagos procesados por ePayCo
+                        </p>
+                    </div>
                 </div>
             </form>
         </Form>
