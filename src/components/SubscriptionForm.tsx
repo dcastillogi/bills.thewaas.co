@@ -24,7 +24,6 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
-import { Separator } from "./ui/separator";
 import HCaptcha from "@hcaptcha/react-hcaptcha";
 import {
     Card,
@@ -34,6 +33,7 @@ import {
     CardTitle,
 } from "./ui/card";
 import { Avatar, AvatarFallback } from "./ui/avatar";
+import { useRef, useState } from "react";
 import { LockClosedIcon } from "@radix-ui/react-icons";
 
 const formSchema = z.object({
@@ -57,16 +57,21 @@ const formSchema = z.object({
 });
 
 export default function SubscriptionForm() {
+    const [token, setToken] = useState<string | null>(null);
+    const hCaptchaRef = useRef<HCaptcha | null>(null);
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
     });
     const { toast } = useToast();
 
-    const onSubmit = async (values: z.infer<typeof formSchema>) => {};
+    const onSubmit = async (values: z.infer<typeof formSchema>) => {
+
+    };
 
     return (
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)}>
+                {/*
                 <Card className="mb-5 p-3">
                     <div className="flex justify-between gap-2">
                         <div className="flex items-center gap-3">
@@ -85,6 +90,8 @@ export default function SubscriptionForm() {
                         <Button variant="outline">Usar</Button>
                     </div>
                 </Card>
+                    */}
+
                 <div className="flex flex-col gap-4">
                     <div className="grid sm:grid-cols-2 gap-4">
                         <FormField
@@ -178,8 +185,7 @@ export default function SubscriptionForm() {
                             )}
                         />
                     </div>
-                    <Separator className="mt-4 mb-1" />
-                    <h2 className="text-2xl font-semibold tracking-tight mb-2">
+                    <h2 className="text-2xl font-semibold tracking-tight mt-4">
                         Información de pago
                     </h2>
                     <FormField
@@ -292,8 +298,10 @@ export default function SubscriptionForm() {
                             )}
                         />
                     </div>
-                    <Separator className="mt-3 mb-2" />
-                    <HCaptcha sitekey="d94e78ec-a5ee-4204-adca-376cfa3ac354" />
+                    <HCaptcha
+                        sitekey="d94e78ec-a5ee-4204-adca-376cfa3ac354"
+                        size="invisible"
+                    />
                     <Button type="submit" className="w-full mt-1">
                         Suscribirme ($7 USD/mes)
                     </Button>

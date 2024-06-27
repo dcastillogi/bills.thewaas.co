@@ -32,11 +32,11 @@ export const POST = async (req: Request) => {
         teamId: new ObjectId(team),
         contactId: new ObjectId(contact),
         lang,
-        state: "created",
+        status: "created",
         email,
         startAt: momentDate.toDate(),
         day: momentDate.day(),
-        plan,
+        planId: new ObjectId(plan),
         reference,
         createdAt: new Date(),
         logs: []

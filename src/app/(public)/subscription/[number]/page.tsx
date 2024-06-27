@@ -2,12 +2,21 @@ import type { Metadata } from "next";
 
 import SubscriptionDetails from "@/components/SubscriptionDetails";
 import SubscriptionForm from "@/components/SubscriptionForm";
+import { getSubscription } from "@/lib/actions";
 
 export const metadata: Metadata = {
     title: "Pagar suscripción - BBR GROUP",
 };
 
-export default function SubscriptionPage() {
+export default async function SubscriptionPage({
+    params
+}: {
+    params: { number: string };
+}) {
+    const subscription = await getSubscription(params.number);
+    if (!subscription) {
+        return <div>Subscription not found</div>;
+    }
     return (
         <div className="lg:flex lg:justify-end lg:overflow-y-auto lg:items-start">
             <div className="lg:w-1/2 px-6 pb-20 lg:pb-10 py-12 bg-muted/30 top-0 left-0 lg:fixed lg:h-screen">
@@ -15,7 +24,7 @@ export default function SubscriptionPage() {
                     <h1 className="text-3xl font-semibold tracking-tight mb-6">
                         Suscripción
                     </h1>
-                    <SubscriptionDetails />
+                    <SubscriptionDetails subscription={subscription} />
                 </div>
             </div>
             <div className="lg:w-1/2 px-6 py-8 lg:py-12">

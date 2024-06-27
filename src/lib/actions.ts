@@ -154,13 +154,51 @@ export const getCityInfo = async (
             },
         },
     ]);
-    const c = (await cityInfo.toArray())
+    const c = await cityInfo.toArray();
     if (c.length != 1) {
-        return false
+        return false;
     }
     return {
         country: c[0].name,
         state: c[0].states.name,
-        city: c[0].cities.name
+        city: c[0].cities.name,
     };
+};
+
+export const getSubscription = async (subscriptionId: string) => {
+    const client = await clientPromise;
+    const db = await client.db("main");
+    const subscriptions = await db.collection("subscriptions");
+
+    if (!ObjectId.isValid(subscriptionId)) {
+        return false;
+    }
+
+    const subscription = await subscriptions.findOne({
+        _id: new ObjectId(subscriptionId),
+    });
+
+    if(!subscription) return false;
+
+    const plans = await db.collection("plans");
+    const plan = await plans.findOne({
+        _id: subscription.planId,
+    });
+
+    subscription.plan = plan;
+
+    const teams = await db.collection("teams");
+    const team = await teams.findOne({
+        _id: subscription.teamId,
+    }, {
+        projection: {
+            photoUrl: 1,
+            name: 1,
+            "info.phone": 1
+        }
+    });
+
+    subscription.team = team;
+
+    return subscription;
 };

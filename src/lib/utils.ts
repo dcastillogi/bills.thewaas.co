@@ -9,5 +9,5 @@ export function toMoneyFormat(value: number, currency: string) {
   return new Intl.NumberFormat("en-US", {
     style: "currency",
     currency,
-  }).format(value)
+  }).format(value) + (currency === "USD" ? " USD" : "")
 }
