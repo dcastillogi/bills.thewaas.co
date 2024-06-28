@@ -22,6 +22,11 @@ export const CURRENCIES = [
     },
 ];
 
+export const COUNTRY_NAMES: Record<string, string> = {
+    CO: "Colombia",
+    US: "Estados Unidos",
+};
+
 export const DOCUMENT_TYPES = [
     {
         name: "Cédula de ciudadanía",

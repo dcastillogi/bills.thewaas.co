@@ -5,6 +5,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 import { useForm } from "react-hook-form";
 import { useToast } from "./ui/use-toast";
+import Lottie from "react-lottie";
+import animationData from "@/lib/check_animation.json";
 
 import {
     Form,
@@ -20,26 +22,30 @@ import { Input } from "./ui/input";
 import {
     Select,
     SelectContent,
+    SelectGroup,
     SelectItem,
     SelectTrigger,
     SelectValue,
+    SelectLabel,
 } from "@/components/ui/select";
 import HCaptcha from "@hcaptcha/react-hcaptcha";
-import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardHeader,
-    CardTitle,
-} from "./ui/card";
-import { Avatar, AvatarFallback } from "./ui/avatar";
 import { useRef, useState } from "react";
 import { LockClosedIcon } from "@radix-ui/react-icons";
+import { COUNTRY_NAMES, DOCUMENT_TYPES } from "@/lib/const";
+import { Loader2Icon } from "lucide-react";
 
 const formSchema = z.object({
-    name: z.string({message: "Debes ingresar un nombre"}).min(2, {message: "Debes ingresar un nombre válido"}),
-    lastName: z.string({message: "Debes ingresar un apellido"}).min(2, {message: "Debes ingresar un apellido válido"}),
-    email: z.string({message: "Debes ingresar un correo electrónico"}).email({message: "Debes ingresar un correo válido"}),
+    name: z
+        .string({ message: "Debes ingresar un nombre" })
+        .min(2, { message: "Debes ingresar un nombre válido" }),
+    lastName: z
+        .string({ message: "Debes ingresar un apellido" })
+        .min(2, { message: "Debes ingresar un apellido válido" }),
+    docType: z.enum(DOCUMENT_TYPES.map((doc) => doc.id) as any, {message: "Debes seleccionar un tipo de documento válido"}),
+    docNumber: z.string().min(5, { message: "Debes ingresar un número de documento válido" }),
+    email: z
+        .string({ message: "Debes ingresar un correo electrónico" })
+        .email({ message: "Debes ingresar un correo válido" }),
     phone: z
         .string()
         .min(11, {
@@ -48,38 +54,91 @@ const formSchema = z.object({
         .max(13, {
             message: "El número de celular debe tener 10 dígitos",
         }),
-    city: z.string().min(1),
-    address: z.string({message: "Debes ingresar una dirección"}).min(5, {message: "Debes ingresar una dirección válida"}),
-    cardNumber: z.string().min(16).max(19),
-    expMonth: z.string().min(1).max(2),
-    expYear: z.string().min(4).max(4),
-    cvc: z.string().min(3).max(4),
+    city: z.string().min(2, {message: "Debes ingresar una ciudad válida"}),
+    address: z
+        .string({ message: "Debes ingresar una dirección" })
+        .min(5, { message: "Debes ingresar una dirección válida" }),
+    cardNumber: z.string().min(16, {message: "Debes ingresar una tarjeta válida"}).max(19, {message: "Debes ingresar una tarjeta válida"}),
+    expMonth: z.string().min(1, {message: "Debes ingresar un mes válido"}).max(2, {message: "Debes ingresar un mes válido"}),
+    expYear: z.string().min(4, {message: "Debes ingresar un año válido"}).max(4, {message: "Debes ingresar un año válido"}),
+    cvc: z.string().min(3, {message: "Debes ingresar un cvc válido"}).max(4, {message: "Debes ingresar un cvc válido"}),
 });
 
-export default function SubscriptionForm() {
-    const [token, setToken] = useState<string | null>(null);
+export default function SubscriptionForm({
+    subscription,
+    phone,
+}: {
+    subscription: string;
+    phone: string;
+}) {
+    const [success, setSuccess] = useState(false);
     const hCaptchaRef = useRef<HCaptcha | null>(null);
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
+        defaultValues: {
+            name: "",
+            lastName: "",
+            docType: "",
+            docNumber: "",
+            email: "",
+            phone: "",
+            city: "",
+            address: "",
+            cardNumber: "",
+            expMonth: "",
+            expYear: "",
+            cvc: "",
+        }
     });
     const { toast } = useToast();
 
-    const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    const onSubmit = async (
+        values: z.infer<typeof formSchema>,
+        options: { token?: string } = {}
+    ) => {
+        const { token = "" } = options;
+
         if (!token) {
             hCaptchaRef.current?.execute();
             return;
         }
-        
-        console.log(values);
 
-        hCaptchaRef.current?.resetCaptcha();
-        setToken(null);
-        form.reset();
+        const response = await fetch("/api/subscriptions/formalize", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                ...values,
+                subscription,
+                token,
+            }),
+            cache: "no-cache",
+        });
+
+        if (response.ok) {
+            setSuccess(true);
+            return;
+        } else {
+            hCaptchaRef.current?.resetCaptcha();
+            if (response.status === 400) {
+                const { message } = await response.json();
+                toast({
+                    title: "¡Oh no! No pudimos procesar tu solicitud",
+                    description: message,
+                });
+            } else {
+                toast({
+                    title: "¡Oh no! Algo salió mal",
+                    description: "No pudimos procesar tu solicitud, intenta de nuevo más tarde",
+                });
+            }
+        }
     };
 
     return (
         <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)}>
+            <form onSubmit={form.handleSubmit((values) => onSubmit(values))}>
                 {/*
                 <Card className="mb-5 p-3">
                     <div className="flex justify-between gap-2">
@@ -130,7 +189,68 @@ export default function SubscriptionForm() {
                             )}
                         />
                     </div>
-
+                    <div className="grid sm:grid-cols-7 gap-4">
+                        <FormField
+                            control={form.control}
+                            name="docType"
+                            render={({ field }) => (
+                                <FormItem className="sm:col-span-3">
+                                    <FormLabel>Tipo</FormLabel>
+                                    <FormControl>
+                                        <Select
+                                            onValueChange={field.onChange}
+                                            defaultValue={field.value}
+                                        >
+                                            <SelectTrigger>
+                                                <SelectValue placeholder="--Seleccionar" />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                {Object.entries(
+                                                    COUNTRY_NAMES
+                                                ).map(([id, country]) => (
+                                                    <SelectGroup key={id}>
+                                                        <SelectLabel>
+                                                            {country}
+                                                        </SelectLabel>
+                                                        {DOCUMENT_TYPES.filter(
+                                                            (type) =>
+                                                                type.country ===
+                                                                id
+                                                        ).map((type) => (
+                                                            <SelectItem
+                                                                value={type.id}
+                                                                key={`type-select-${type.id}`}
+                                                            >
+                                                                {type.name}
+                                                            </SelectItem>
+                                                        ))}
+                                                    </SelectGroup>
+                                                ))}
+                                            </SelectContent>
+                                        </Select>
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="docNumber"
+                            render={({ field }) => (
+                                <FormItem className="sm:col-span-4">
+                                    <FormLabel>Número de Documento</FormLabel>
+                                    <FormControl>
+                                        <Input
+                                            placeholder="100239247"
+                                            {...field}
+                                            autoComplete="off"
+                                        />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                    </div>
                     <FormField
                         control={form.control}
                         name="email"
@@ -187,7 +307,10 @@ export default function SubscriptionForm() {
                                 <FormItem className="md:col-span-2">
                                     <FormLabel>Ciudad</FormLabel>
                                     <FormControl>
-                                        <Input placeholder="Bogotá" {...field} />
+                                        <Input
+                                            placeholder="Bogotá"
+                                            {...field}
+                                        />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -312,13 +435,23 @@ export default function SubscriptionForm() {
                         size="invisible"
                         ref={hCaptchaRef}
                         onVerify={(token: string) => {
-                            setToken(token);
-                            form.handleSubmit(onSubmit)();
+                            form.handleSubmit((values) =>
+                                onSubmit(values, { token })
+                            )();
                         }}
-                        onExpire={() => setToken(null)}
                     />
-                    <Button type="submit" className="w-full mt-1">
-                        Suscribirme ($7 USD/mes)
+                    <Button
+                        type="submit"
+                        className="w-full mt-1"
+                        disabled={form.formState.isSubmitting}
+                    >
+                        {form.formState.isSubmitting ? (
+                            <>
+                                <Loader2Icon className="w-5 h-5 animate-spin mr-2" /> Procesando...
+                            </>
+                        ) : (
+                            "Suscribirme ($7 USD/mes)"
+                        )}
                     </Button>
                     <div className="flex justify-center gap-2 -mt-2 items-center">
                         <LockClosedIcon className="w-4 h-4 text-muted-foreground" />
@@ -328,6 +461,38 @@ export default function SubscriptionForm() {
                     </div>
                 </div>
             </form>
+            {success && (
+                <div className="w-screen h-screen fixed top-0 bg-background z-40 left-0 grid place-items-center">
+                    <div className="max-w-lg px-6">
+                        <Lottie
+                            options={{ animationData }}
+                            width={200}
+                            height={200}
+                        />
+                        <h1 className="text-3xl font-semibold text-center -mt-8">
+                            ¡Gracias!
+                        </h1>
+                        <p className="text-center text-muted-foreground">
+                            Tu suscripción se ha realizado correctamente
+                        </p>
+                        <p className="text-sm mt-10 text-center text-muted-foreground">
+                            Si tienes alguna duda, no dudes en{" "}
+                            <a
+                                href={`https://api.whatsapp.com/send/?phone=${phone}&text=${encodeURIComponent(
+                                    "Hola, tengo una duda sobre mi suscripción No. " +
+                                        subscription
+                                )}`}
+                                target="_blank"
+                                className="underline hover:text-white transition-colors"
+                                rel="noopener noreferrer"
+                            >
+                                contactarnos
+                            </a>
+                            .
+                        </p>
+                    </div>
+                </div>
+            )}
         </Form>
     );
 }

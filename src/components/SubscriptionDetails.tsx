@@ -43,7 +43,7 @@ export default function SubscriptionDetails({
                     )}
                 </p>
             </div>
-            <div className="mt-4 space-y-4 text-white/70">
+            <div className="mt-4 space-y-4 text-primary/80">
                 <MDXRemote
                     source={subscription.plan.description}
                     components={components}
@@ -53,8 +53,8 @@ export default function SubscriptionDetails({
                 <CalendarIcon className="w-4 h-4 text-primary" />
                 <AlertTitle>Información Importante</AlertTitle>
                 <AlertDescription>
-                    Tu suscripción se renovará automáticamente el día{" "}
-                    {subscription.day} de cada mes.
+                    Tu suscripción se {subscription.status === "active" ? "renovará" : "activará"} automáticamente el {subscription.nextPayment.toLocaleDateString('es-ES', { day: '2-digit', month: 'long' })}
+                    
                 </AlertDescription>
             </Alert>
             <Separator className="mt-6 mb-4" />

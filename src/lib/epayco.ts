@@ -15,7 +15,7 @@ export default class ePayCo {
     privateKey: string;
     apiKey: string;
     apify_token: null | string = null;
-    base_token: null | string = null
+    base_token: null | string = null;
     constructor(paymentOptions: paymentOptions) {
         this.apiKey = paymentOptions.public_key;
         this.privateKey = decrypt(paymentOptions.private_key);
@@ -78,6 +78,129 @@ export default class ePayCo {
             },
             body: JSON.stringify(plan),
         });
+        if (!response.ok) {
+            return false;
+        }
+        return await response.json();
+    }
+
+    async createToken(card: {
+        cardNumber: string;
+        expMonth: string;
+        expYear: string;
+        cvc: string;
+    }) {
+        if (!this.base_token) {
+            await this.getBaseToken();
+        }
+        const response = await fetch(`${BASE_URL}/v1/tokens`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${this.base_token}`,
+            },
+            body: JSON.stringify({
+                "card[number]": card.cardNumber,
+                "card[exp_month]": card.expMonth,
+                "card[exp_year]": card.expYear,
+                "card[cvc]": card.cvc,
+                hasCvv: true,
+            }),
+        });
+        if (!response.ok) {
+            return false;
+        }
+        return await response.json();
+    }
+
+    async createCustomer(customer: {
+        token_card: string;
+        name: string;
+        last_name: string;
+        email: string;
+        city: string;
+        address: string;
+        phone: string;
+        doc_type: string;
+        doc_number: string;
+    }) {
+        if (!this.apify_token) {
+            await this.getBaseToken();
+        }
+        const response = await fetch(`${BASE_URL}/payment/v1/customer/create`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${this.base_token}`,
+            },
+            body: JSON.stringify({
+                ...customer,
+            }),
+        });
+        if (!response.ok) {
+            return false;
+        }
+        return await response.json();
+    }
+
+    async createSubscription(subscription: {
+        id_plan: string;
+        customer: string;
+        token_card: string;
+        doc_type: string;
+        doc_number: string;
+        ip: string;
+        url_confirmation: string;
+        
+    }) {
+        if (!this.base_token) {
+            await this.getBaseToken();
+        }
+        const response = await fetch(
+            `${BASE_URL}/recurring/v1/subscription/create`,
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${this.base_token}`,
+                },
+                body: JSON.stringify({
+                    ...subscription,
+                }),
+            }
+        );
+        if (!response.ok) {
+            return false;
+        }
+        return await response.json();
+    }
+
+    async chargeSubscription(charge: {
+        id_plan: string;
+        customer: string;
+        token_card: string;
+        doc_type: string;
+        doc_number: string;
+        ip: string;
+        subscription: string;
+        url_confirmation: string;
+    }) {
+        if (!this.base_token) {
+            await this.getBaseToken();
+        }
+        const response = await fetch(
+            `${BASE_URL}/payment/v1/charge/subscription/create`,
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${this.base_token}`,
+                },
+                body: JSON.stringify({
+                    ...charge,
+                }),
+            }
+        );
         if (!response.ok) {
             return false;
         }
