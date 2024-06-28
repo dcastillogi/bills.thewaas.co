@@ -17,9 +17,12 @@ export const POST = async (req: Request) => {
         expiresAt,
         payments,
         annotations,
+        discount
     } = await req.json();
     const { session, userId } = await getSession();
     const team = await verifyTeam(userId);
+
+    const discountValue = parseFloat(discount) || 0;
 
     if (!team) {
         return Response.json(
@@ -110,6 +113,16 @@ export const POST = async (req: Request) => {
         }
     }
 
+    if (paymentsTotal != total - discountValue) {
+        return Response.json(
+            {
+                status: "error",
+                message: "Payments total is different than the total",
+            },
+            { status: 400 }
+        );
+    }
+
     const emmitedAtAdjusted = moment(createdAt).startOf('day').tz('America/Bogota').toDate();
     const expiresAtAdjusted = moment(expiresAt).endOf('day').tz('America/Bogota').toDate();
     const newBill = await collection.insertOne({
@@ -149,7 +162,8 @@ export const POST = async (req: Request) => {
         payments: paymentsFormated,
         annotations,
         subtotal: total,
-        total: total,
+        discount: discountValue,
+        total: total - discountValue,
         logs: [],
         signCodes: [],
     });

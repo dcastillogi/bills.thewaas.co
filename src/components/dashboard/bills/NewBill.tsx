@@ -71,6 +71,7 @@ const formSchema = z.object({
             text: z.string().min(1),
         })
     ),
+    discount: z.string().optional(),
 });
 
 const NewBill = () => {
@@ -359,7 +360,7 @@ const NewBill = () => {
                                             </FormLabel>
                                             <FormControl>
                                                 <Input
-                                                    placeholder="shadcn"
+                                                    placeholder="$ 20.000"
                                                     {...field}
                                                 />
                                             </FormControl>
@@ -412,6 +413,25 @@ const NewBill = () => {
                     >
                         Agregar Producto ({productFields.length})
                     </Button>
+                </div>
+                <Separator />
+                <div>
+                    <FormField
+                        control={form.control}
+                        name="discount"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Descuento</FormLabel>
+                                <FormControl>
+                                    <Input
+                                        placeholder="$20.000"
+                                        {...field}
+                                    />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
                 </div>
                 <Separator />
                 <div>

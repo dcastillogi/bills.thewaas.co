@@ -57,6 +57,7 @@ export const GET = async (req: Request) => {
                 },
                 products: bill.products,
                 subtotal: bill.subtotal,
+                discount: bill.discount,
                 total: bill.total,
                 payments: bill.payments,
             }}
@@ -226,6 +227,7 @@ const MyDocument = ({
         products: any[];
         currency: string;
         subtotal: number;
+        discount: number;
         total: number;
         payments: any[];
     };
@@ -332,6 +334,14 @@ const MyDocument = ({
                             {toMoneyFormat(bill.subtotal, bill.currency)}
                         </Text>
                     </View>
+                    {bill.discount > 0 && (
+                        <View style={styles.tableRow}>
+                            <Text style={styles.col2}>Descuento</Text>
+                            <Text style={styles.lastCol}>
+                                -{toMoneyFormat(bill.discount, bill.currency)}
+                            </Text>
+                        </View>
+                    )}
                     <View style={{ ...styles.tableRow, ...styles.semibold }}>
                         <Text style={styles.col2}>Total</Text>
                         <Text style={styles.lastCol}>
