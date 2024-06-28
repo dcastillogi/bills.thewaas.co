@@ -16,6 +16,7 @@ export async function generateMetadata({
     }
     return {
         title: subscription.plan.name + " - " + subscription.team.name,
+        description: `Hola, aquí puedes ver y gestionar los detalles de tu suscripción a ${subscription.plan.name} con ${subscription.team.name}.`,
     };
 }
 
