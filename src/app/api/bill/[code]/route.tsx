@@ -19,15 +19,19 @@ export const GET = async (req: Request) => {
         <MyDocument
             bill={{
                 _id: bill._id.toString(),
-                emittedAt: bill.emittedAt.toLocaleDateString(
-                    "es-CO",
-                    { year: "numeric", month: "long", day: "numeric", timeZone: "America/Bogota"},
-                ),
+                emittedAt: bill.emittedAt.toLocaleDateString("es-CO", {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                    timeZone: "America/Bogota",
+                }),
                 currency: bill.currency,
-                expiresAt: bill.expiresAt.toLocaleDateString(
-                    "es-CO",
-                    { year: "numeric", month: "long", day: "numeric", timeZone: "America/Bogota"}
-                ),
+                expiresAt: bill.expiresAt.toLocaleDateString("es-CO", {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                    timeZone: "America/Bogota",
+                }),
                 issuer: {
                     name: bill.issuer.name,
                     document: bill.issuer.document,
@@ -112,7 +116,7 @@ const styles = StyleSheet.create({
         fontSize: 10,
         lineHeight: 1.5,
     },
-    payments: {
+    annotations: {
         marginTop: 10,
         fontSize: 10,
         lineHeight: 1.5,
@@ -335,19 +339,23 @@ const MyDocument = ({
                         </Text>
                     </View>
                 </View>
-                <View style={styles.payments}>
+                <View style={styles.annotations}>
+                    <Text>
+                        Al realizar el pago asociado a esta cuenta de cobro, se
+                        entenderá que ha sido aceptada.
+                    </Text>
                     {bill.payments.map((payment: any, index: number) => (
                         <View
                             style={styles.payment}
                             key={`row-payment-${index}`}
                         >
                             <Text style={styles.semibold}>
-                                Pago {index + 1}{" "}
-                                ({new Date(payment.date).toLocaleDateString(
+                                Pago {index + 1} (
+                                {new Date(payment.date).toLocaleDateString(
                                     "es-CO",
-                                    {timeZone: "America/Bogota"}
-                                )})
-                                :
+                                    { timeZone: "America/Bogota" }
+                                )}
+                                ) :
                             </Text>
                             <Text>
                                 {toMoneyFormat(payment.amount, bill.currency)}
