@@ -278,7 +278,7 @@ const MyDocument = ({
                         <Text>{bill.issuer.city}</Text>
                         <Text>{bill.issuer.country}</Text>
                         <Text>{bill.issuer.email}</Text>
-                        <Text>{bill.issuer.phone}</Text>
+                        <Text>+{bill.issuer.phone}</Text>
                     </View>
                     <View>
                         <Text style={styles.semibold}>
@@ -290,7 +290,7 @@ const MyDocument = ({
                         <Text>{bill.recipient.city}</Text>
                         <Text>{bill.recipient.country}</Text>
                         <Text>{bill.recipient.email}</Text>
-                        <Text>{bill.recipient.phone}</Text>
+                        <Text>+{bill.recipient.phone}</Text>
                     </View>
                 </View>
                 <View style={styles.table}>
@@ -346,7 +346,7 @@ const MyDocument = ({
                         </View>
                     )}
                     <View style={{ ...styles.tableRow, ...styles.semibold }}>
-                        <Text style={styles.col2}>Total</Text>
+                        <Text style={styles.totalTableCol1}>Total</Text>
                         <Text style={styles.lastCol}>
                             {toMoneyFormat(bill.total, bill.currency)}
                         </Text>
