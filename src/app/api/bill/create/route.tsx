@@ -111,17 +111,18 @@ export const POST = async (req: Request) => {
                 date: moment(p.date).endOf('day').tz('America/Bogota').toDate(),
             });
         }
+        if (paymentsTotal != total - discountValue) {
+            return Response.json(
+                {
+                    status: "error",
+                    message: "Payments total is different than the total",
+                },
+                { status: 400 }
+            );
+        }
     }
 
-    if (paymentsTotal != total - discountValue) {
-        return Response.json(
-            {
-                status: "error",
-                message: "Payments total is different than the total",
-            },
-            { status: 400 }
-        );
-    }
+    
 
     const emmitedAtAdjusted = moment(createdAt).startOf('day').tz('America/Bogota').toDate();
     const expiresAtAdjusted = moment(expiresAt).endOf('day').tz('America/Bogota').toDate();
