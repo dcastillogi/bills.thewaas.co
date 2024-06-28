@@ -18,6 +18,8 @@ export const GET = async (req: Request) => {
     const subscriptions = await db.collection("subscriptions");
     const teams = await db.collection("teams");
 
+    let subCount = 0;
+
     // =================== Activate and charge pending subscriptions ===================
 
     try {
@@ -32,6 +34,7 @@ export const GET = async (req: Request) => {
             .toArray();
 
         for (const sub of pendingSubs) {
+            subCount++;
             const team = await teams.findOne({ _id: sub.teamId });
             const epayco = new ePayCo(team!.payments!);
             const subscriptionData = await epayco.createSubscription({
@@ -145,6 +148,7 @@ export const GET = async (req: Request) => {
             .toArray();
         
         for (const sub of activeSubs) {
+            subCount++;
             const team = await teams.findOne({ _id: sub.teamId });
             const epayco = new ePayCo(team!.payments!);
             const chargeData = await epayco.chargeSubscription({
@@ -193,5 +197,5 @@ export const GET = async (req: Request) => {
         }
     } catch (error) {}
 
-    return NextResponse.json({ ok: true });
+    return NextResponse.json({ ok: true, subCount });
 };
