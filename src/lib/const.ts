@@ -22,9 +22,15 @@ export const CURRENCIES = [
     },
 ];
 
-export const COUNTRY_NAMES: Record<string, string> = {
-    CO: "Colombia",
-    US: "Estados Unidos",
+export const COUNTRIES: Record<string, any> = {
+    CO: {
+        name: "Colombia",
+        phoneCode: "57",
+    },
+    US: {
+        name: "Estados Unidos",
+        phoneCode: "1",
+    }
 };
 
 export const DOCUMENT_TYPES = [

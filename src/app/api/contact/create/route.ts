@@ -75,7 +75,7 @@ export const POST = async (req: Request) => {
         teamId: new ObjectId(team),
         name,
         docType,
-        docNumber: docNumber.replace(".", "").strip(),
+        docNumber: docNumber,
         email,
         phone,
         city: {

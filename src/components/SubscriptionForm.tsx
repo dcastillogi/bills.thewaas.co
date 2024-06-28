@@ -31,7 +31,7 @@ import {
 import HCaptcha from "@hcaptcha/react-hcaptcha";
 import { useRef, useState } from "react";
 import { LockClosedIcon } from "@radix-ui/react-icons";
-import { COUNTRY_NAMES, DOCUMENT_TYPES } from "@/lib/const";
+import { COUNTRIES, DOCUMENT_TYPES } from "@/lib/const";
 import { Loader2Icon } from "lucide-react";
 
 const formSchema = z.object({
@@ -206,11 +206,11 @@ export default function SubscriptionForm({
                                             </SelectTrigger>
                                             <SelectContent>
                                                 {Object.entries(
-                                                    COUNTRY_NAMES
+                                                    COUNTRIES
                                                 ).map(([id, country]) => (
                                                     <SelectGroup key={id}>
                                                         <SelectLabel>
-                                                            {country}
+                                                            {country.name}
                                                         </SelectLabel>
                                                         {DOCUMENT_TYPES.filter(
                                                             (type) =>
