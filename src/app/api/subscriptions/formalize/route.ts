@@ -157,7 +157,12 @@ export const POST = async (req: NextRequest) => {
             }
         );
     }
-    if (moment(sub.startDate).isSame(moment(new Date()).tz("America/Bogota"), 'day')) {
+    if (
+        moment(sub.startDate).isSame(
+            moment(new Date()).tz("America/Bogota"),
+            "day"
+        )
+    ) {
         let subId;
         if (!sub.payment || !sub.payment.subscriptionId) {
             const subscriptionData = await epayco.createSubscription({
@@ -185,9 +190,7 @@ export const POST = async (req: NextRequest) => {
             subId = subscriptionData.id;
         } else subId = sub.payment.subscriptionId;
         // Crear suscripción epayco
-        
 
-        
         // Actualizar suscripción
         await subscriptions.updateOne(
             { _id: sub._id },
@@ -202,6 +205,8 @@ export const POST = async (req: NextRequest) => {
                             process.env.NODE_ENV === "development"
                                 ? "152.201.50.47"
                                 : req.ip!,
+                        docType,
+                        docNumber,
                     },
                 },
                 $push: {
@@ -233,9 +238,10 @@ export const POST = async (req: NextRequest) => {
             return Response.json(
                 {
                     status: "error",
-                    message: "No pudimos realizar el cobro, verifica tus datos de pago e intenta de nuevo",
+                    message:
+                        "No pudimos realizar el cobro, verifica tus datos de pago e intenta de nuevo",
                 },
-                { status: 400 } 
+                { status: 400 }
             );
         }
 
@@ -254,7 +260,10 @@ export const POST = async (req: NextRequest) => {
             }
         );
     } else if (
-        moment(sub.startDate).isAfter(moment(new Date()).tz("America/Bogota"), 'day')
+        moment(sub.startDate).isAfter(
+            moment(new Date()).tz("America/Bogota"),
+            "day"
+        )
     ) {
         // Crear suscripción programada
         await subscriptions.updateOne(
@@ -270,6 +279,8 @@ export const POST = async (req: NextRequest) => {
                             process.env.NODE_ENV === "development"
                                 ? "152.201.50.47"
                                 : req.ip!,
+                        docType,
+                        docNumber,
                     },
                 },
                 $push: {
@@ -277,7 +288,9 @@ export const POST = async (req: NextRequest) => {
                         date: new Date(),
                         message: `Suscripción aceptada por el cliente con tarjeta ${name} ${lastName} y programada para el ${moment(
                             sub.startDate
-                        ).tz("America/Bogota").format("DD/MM/YYYY")}`,
+                        )
+                            .tz("America/Bogota")
+                            .format("DD/MM/YYYY")}`,
                     } as any,
                 },
             }
