@@ -84,8 +84,8 @@ export const BillEmail = ({
                         Notificación Cuenta de Cobro
                     </Heading>
                     <Text style={global.text}>
-                        Estimado(a) {bill.recipient.name}, tu cuenta de cobro
-                        ha sido generada con éxito. Puedes revisar el documento
+                        Estimado(a) {bill.recipient.name}, tu cuenta de cobro ha
+                        sido generada con éxito. Puedes revisar el documento
                         adjunto. Si tienes alguna pregunta, no dudes en
                         contactarnos.
                     </Text>
@@ -117,14 +117,21 @@ export const BillEmail = ({
                                 >
                                     {product.title}
                                 </Text>
-                                {product.description && product.description.length > 1 && (
-                                    <Text style={global.text}>
-                                        {product.description}
-                                    </Text>
-                                )}
+                                {product.description &&
+                                    product.description.length > 1 && (
+                                        <Text style={global.text}>
+                                            {product.description}
+                                        </Text>
+                                    )}
                             </Column>
                             <Column align="right">
-                                <Text style={global.text}>{toMoneyFormat(product.price, bill.currency)} x {product.quantity}</Text>
+                                <Text style={global.text}>
+                                    {toMoneyFormat(
+                                        product.price,
+                                        bill.currency
+                                    )}{" "}
+                                    x {product.quantity}
+                                </Text>
                             </Column>
                         </Row>
                     ))}
@@ -187,6 +194,12 @@ export const BillEmail = ({
                 </Section>
                 <Hr style={global.hr} />
                 <Section style={paddingY}>
+                    <Row>
+                        <Text style={footer.text}>
+                            Al realizar el pago asociado a esta cuenta de cobro,
+                            se entenderá que ha sido aceptada.
+                        </Text>
+                    </Row>
                     <Row>
                         <Text style={footer.text}>
                             Powered by Bills - © The Waas Co.
