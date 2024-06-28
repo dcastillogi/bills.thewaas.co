@@ -32,7 +32,7 @@ import {
     FormLabel,
     FormMessage,
 } from "@/components/ui/form";
-import { CURRENCIES, DOCUMENT_TYPES, LANGUAGES } from "@/lib/const";
+import { CURRENCIES, DOCUMENT_TYPES, LANGUAGES, COUNTRIES } from "@/lib/const";
 import { ScrollArea } from "../../ui/scroll-area";
 import { useEffect, useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
@@ -50,6 +50,9 @@ const formSchema = z.object({
         .max(13, {
             message: "El número de celular debe tener 10 dígitos",
         }),
+    phoneCode: z
+        .string()
+        .min(1, { message: "Debes ingresar un código celular válido" }),
     city: z.string().min(1),
     state: z.string().min(1),
     country: z.string().min(2),
@@ -270,20 +273,21 @@ const ContactForm = ({ teamId }: { teamId: string }) => {
                                                             <SelectValue placeholder="--Seleccionar" />
                                                         </SelectTrigger>
                                                         <SelectContent>
-                                                            {DOCUMENT_TYPES.filter((doc) => !countrySelected || doc.country == countrySelected).map(
-                                                                (type) => (
-                                                                    <SelectItem
-                                                                        value={
-                                                                            type.id
-                                                                        }
-                                                                        key={`type-select-${type.id}`}
-                                                                    >
-                                                                        {
-                                                                            type.name
-                                                                        }
-                                                                    </SelectItem>
-                                                                )
-                                                            )}
+                                                            {DOCUMENT_TYPES.filter(
+                                                                (doc) =>
+                                                                    !countrySelected ||
+                                                                    doc.country ==
+                                                                        countrySelected
+                                                            ).map((type) => (
+                                                                <SelectItem
+                                                                    value={
+                                                                        type.id
+                                                                    }
+                                                                    key={`type-select-${type.id}`}
+                                                                >
+                                                                    {type.name}
+                                                                </SelectItem>
+                                                            ))}
                                                         </SelectContent>
                                                     </Select>
                                                 </FormControl>
@@ -371,23 +375,69 @@ const ContactForm = ({ teamId }: { teamId: string }) => {
                                         </FormItem>
                                     )}
                                 />
-                                <FormField
-                                    control={form.control}
-                                    name="phone"
-                                    render={({ field }) => (
-                                        <FormItem>
-                                            <FormLabel>Celular</FormLabel>
-                                            <FormControl>
-                                                <Input
-                                                    placeholder="573002549256"
-                                                    {...field}
-                                                    autoComplete="off"
-                                                />
-                                            </FormControl>
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
-                                />
+                                <div className="grid grid-cols-4 sm:grid-cols-5 gap-4">
+                                    <FormField
+                                        control={form.control}
+                                        name="phoneCode"
+                                        render={({ field }) => (
+                                            <FormItem className="col-span-1">
+                                                <FormLabel>Código</FormLabel>
+                                                <FormControl>
+                                                    <Select
+                                                        onValueChange={
+                                                            field.onChange
+                                                        }
+                                                        defaultValue={
+                                                            field.value
+                                                        }
+                                                    >
+                                                        <SelectTrigger>
+                                                            <SelectValue placeholder="+1" />
+                                                        </SelectTrigger>
+                                                        <SelectContent>
+                                                            {Object.values(
+                                                                COUNTRIES
+                                                            ).map(
+                                                                (
+                                                                    country: any
+                                                                ) => (
+                                                                    <SelectItem
+                                                                        value={
+                                                                            country.phoneCode
+                                                                        }
+                                                                        key={`phone-code-select-${country.phoneCode}`}
+                                                                    >
+                                                                        +
+                                                                        {
+                                                                            country.phoneCode
+                                                                        }
+                                                                    </SelectItem>
+                                                                )
+                                                            )}
+                                                        </SelectContent>
+                                                    </Select>
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                    <FormField
+                                        control={form.control}
+                                        name="phone"
+                                        render={({ field }) => (
+                                            <FormItem className="col-span-3 sm:col-span-4">
+                                                <FormLabel>Celular</FormLabel>
+                                                <FormControl>
+                                                    <Input
+                                                        placeholder="3002549256"
+                                                        {...field}
+                                                    />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                </div>
                                 <div className="grid md:grid-cols-6 gap-4">
                                     <FormField
                                         control={form.control}

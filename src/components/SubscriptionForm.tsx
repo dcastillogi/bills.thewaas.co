@@ -41,27 +41,44 @@ const formSchema = z.object({
     lastName: z
         .string({ message: "Debes ingresar un apellido" })
         .min(2, { message: "Debes ingresar un apellido válido" }),
-    docType: z.enum(DOCUMENT_TYPES.map((doc) => doc.id) as any, {message: "Debes seleccionar un tipo de documento válido"}),
-    docNumber: z.string().min(5, { message: "Debes ingresar un número de documento válido" }),
+    docType: z.enum(DOCUMENT_TYPES.map((doc) => doc.id) as any, {
+        message: "Debes seleccionar un tipo de documento válido",
+    }),
+    docNumber: z
+        .string()
+        .min(5, { message: "Debes ingresar un número de documento válido" }),
     email: z
         .string({ message: "Debes ingresar un correo electrónico" })
         .email({ message: "Debes ingresar un correo válido" }),
     phone: z
         .string()
-        .min(11, {
+        .min(10, {
             message: "El número de celular debe tener 10 dígitos",
         })
-        .max(13, {
+        .max(10, {
             message: "El número de celular debe tener 10 dígitos",
         }),
-    city: z.string().min(2, {message: "Debes ingresar una ciudad válida"}),
+    city: z.string().min(2, { message: "Debes ingresar una ciudad válida" }),
     address: z
         .string({ message: "Debes ingresar una dirección" })
         .min(5, { message: "Debes ingresar una dirección válida" }),
-    cardNumber: z.string().min(16, {message: "Debes ingresar una tarjeta válida"}).max(19, {message: "Debes ingresar una tarjeta válida"}),
-    expMonth: z.string().min(1, {message: "Debes ingresar un mes válido"}).max(2, {message: "Debes ingresar un mes válido"}),
-    expYear: z.string().min(4, {message: "Debes ingresar un año válido"}).max(4, {message: "Debes ingresar un año válido"}),
-    cvc: z.string().min(3, {message: "Debes ingresar un cvc válido"}).max(4, {message: "Debes ingresar un cvc válido"}),
+    cardNumber: z
+        .string()
+        .min(16, { message: "Debes ingresar una tarjeta válida" })
+        .max(19, { message: "Debes ingresar una tarjeta válida" }),
+    expMonth: z
+        .string()
+        .min(1, { message: "Debes ingresar un mes válido" })
+        .max(2, { message: "Debes ingresar un mes válido" }),
+    expYear: z
+        .string()
+        .min(4, { message: "Debes ingresar un año válido" })
+        .max(4, { message: "Debes ingresar un año válido" }),
+    cvc: z
+        .string()
+        .min(3, { message: "Debes ingresar un cvc válido" })
+        .max(4, { message: "Debes ingresar un cvc válido" }),
+    phoneCode: z.string().min(1, { message: "Debes ingresar un código celular válido" }),
 });
 
 export default function SubscriptionForm({
@@ -88,7 +105,8 @@ export default function SubscriptionForm({
             expMonth: "",
             expYear: "",
             cvc: "",
-        }
+            phoneCode: "",
+        },
     });
     const { toast } = useToast();
 
@@ -130,7 +148,8 @@ export default function SubscriptionForm({
             } else {
                 toast({
                     title: "¡Oh no! Algo salió mal",
-                    description: "No pudimos procesar tu solicitud, intenta de nuevo más tarde",
+                    description:
+                        "No pudimos procesar tu solicitud, intenta de nuevo más tarde",
                 });
             }
         }
@@ -205,27 +224,29 @@ export default function SubscriptionForm({
                                                 <SelectValue placeholder="--Seleccionar" />
                                             </SelectTrigger>
                                             <SelectContent>
-                                                {Object.entries(
-                                                    COUNTRIES
-                                                ).map(([id, country]) => (
-                                                    <SelectGroup key={id}>
-                                                        <SelectLabel>
-                                                            {country.name}
-                                                        </SelectLabel>
-                                                        {DOCUMENT_TYPES.filter(
-                                                            (type) =>
-                                                                type.country ===
-                                                                id
-                                                        ).map((type) => (
-                                                            <SelectItem
-                                                                value={type.id}
-                                                                key={`type-select-${type.id}`}
-                                                            >
-                                                                {type.name}
-                                                            </SelectItem>
-                                                        ))}
-                                                    </SelectGroup>
-                                                ))}
+                                                {Object.entries(COUNTRIES).map(
+                                                    ([id, country]) => (
+                                                        <SelectGroup key={id}>
+                                                            <SelectLabel>
+                                                                {country.name}
+                                                            </SelectLabel>
+                                                            {DOCUMENT_TYPES.filter(
+                                                                (type) =>
+                                                                    type.country ===
+                                                                    id
+                                                            ).map((type) => (
+                                                                <SelectItem
+                                                                    value={
+                                                                        type.id
+                                                                    }
+                                                                    key={`type-select-${type.id}`}
+                                                                >
+                                                                    {type.name}
+                                                                </SelectItem>
+                                                            ))}
+                                                        </SelectGroup>
+                                                    )
+                                                )}
                                             </SelectContent>
                                         </Select>
                                     </FormControl>
@@ -267,22 +288,55 @@ export default function SubscriptionForm({
                             </FormItem>
                         )}
                     />
-                    <FormField
-                        control={form.control}
-                        name="phone"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Celular</FormLabel>
-                                <FormControl>
-                                    <Input
-                                        placeholder="573002549256"
-                                        {...field}
-                                    />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
+                    <div className="grid grid-cols-4 sm:grid-cols-5 gap-4">
+                        <FormField
+                            control={form.control}
+                            name="phoneCode"
+                            render={({ field }) => (
+                                <FormItem className="col-span-1">
+                                    <FormLabel>Código</FormLabel>
+                                    <FormControl>
+                                        <Select
+                                            onValueChange={field.onChange}
+                                            defaultValue={field.value}
+                                        >
+                                            <SelectTrigger>
+                                                <SelectValue placeholder="+1" />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                {Object.values(COUNTRIES).map((country: any) => (
+                                                    <SelectItem
+                                                        value={country.phoneCode}
+                                                        key={`phone-code-select-${country.phoneCode}`}
+                                                    >
+                                                        +{country.phoneCode}
+                                                    </SelectItem>
+                                                ))}
+                                            </SelectContent>
+                                        </Select>
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="phone"
+                            render={({ field }) => (
+                                <FormItem className="col-span-3 sm:col-span-4">
+                                    <FormLabel>Celular</FormLabel>
+                                    <FormControl>
+                                        <Input
+                                            placeholder="3002549256"
+                                            {...field}
+                                        />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                    </div>
+
                     <div className="grid md:grid-cols-6 gap-4">
                         <FormField
                             control={form.control}
@@ -447,7 +501,8 @@ export default function SubscriptionForm({
                     >
                         {form.formState.isSubmitting ? (
                             <>
-                                <Loader2Icon className="w-5 h-5 animate-spin mr-2" /> Procesando...
+                                <Loader2Icon className="w-5 h-5 animate-spin mr-2" />{" "}
+                                Procesando...
                             </>
                         ) : (
                             "Suscribirme ($7 USD/mes)"

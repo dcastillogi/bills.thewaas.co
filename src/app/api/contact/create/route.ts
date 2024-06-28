@@ -12,6 +12,7 @@ export const POST = async (req: Request) => {
         docNumber,
         email,
         phone,
+        phoneCode,
         city,
         state,
         country,
@@ -77,7 +78,7 @@ export const POST = async (req: Request) => {
         docType,
         docNumber: docNumber,
         email,
-        phone,
+        phone: phoneCode + phone,
         city: {
             city,
             state,
