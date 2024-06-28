@@ -144,7 +144,10 @@ const styles = StyleSheet.create({
     totalTable: {
         fontSize: 10,
         marginTop: 20,
-        paddingLeft: 350,
+        paddingLeft: 320,
+    },
+    totalTableCol1: {
+        width: 80,
     },
     col1: {
         width: 300,
@@ -329,7 +332,7 @@ const MyDocument = ({
                 </View>
                 <View style={styles.totalTable}>
                     <View style={styles.tableRow}>
-                        <Text style={styles.col2}>Subtotal</Text>
+                        <Text style={styles.totalTableCol1}>Subtotal</Text>
                         <Text style={styles.lastCol}>
                             {toMoneyFormat(bill.subtotal, bill.currency)}
                         </Text>
