@@ -27,7 +27,7 @@ export const POST = async (req: Request) => {
     const client = await clientPromise;
     const db = client.db("main");
     const subscriptions = db.collection("subscriptions");
-    const momentDate = moment(start_date).startOf('day').tz('America/Bogota');
+    const momentDate = moment(start_date).tz('America/Bogota').startOf('day');
     const p = await subscriptions.insertOne({
         teamId: new ObjectId(team),
         contactId: new ObjectId(contact),

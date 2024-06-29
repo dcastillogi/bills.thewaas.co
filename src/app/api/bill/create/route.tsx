@@ -108,7 +108,7 @@ export const POST = async (req: Request) => {
             paymentsTotal += parseFloat(p.amount);
             paymentsFormated.push({
                 amount: parseFloat(p.amount),
-                date: moment(p.date).endOf("day").tz("America/Bogota").toDate(),
+                date: moment.tz(p.date, 'America/Bogota').endOf('day').toDate(),
             });
         }
         if (paymentsTotal != total - discountValue) {
