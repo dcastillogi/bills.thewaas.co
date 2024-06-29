@@ -17,7 +17,7 @@ export const POST = async (req: Request) => {
         expiresAt,
         payments,
         annotations,
-        discount
+        discount,
     } = await req.json();
     const { session, userId } = await getSession();
     const team = await verifyTeam(userId);
@@ -108,7 +108,7 @@ export const POST = async (req: Request) => {
             paymentsTotal += parseFloat(p.amount);
             paymentsFormated.push({
                 amount: parseFloat(p.amount),
-                date: moment(p.date).endOf('day').tz('America/Bogota').toDate(),
+                date: moment(p.date).endOf("day").tz("America/Bogota").toDate(),
             });
         }
         if (paymentsTotal != total - discountValue) {
@@ -121,11 +121,14 @@ export const POST = async (req: Request) => {
             );
         }
     }
-
-    
-
-    const emmitedAtAdjusted = moment(createdAt).startOf('day').tz('America/Bogota').toDate();
-    const expiresAtAdjusted = moment(expiresAt).endOf('day').tz('America/Bogota').toDate();
+    const emmitedAtAdjusted = moment
+        .tz(createdAt, "America/Bogota")
+        .startOf("day")
+        .toDate();
+    const expiresAtAdjusted = moment
+        .tz(expiresAt, "America/Bogota")
+        .endOf("day")
+        .toDate();
     const newBill = await collection.insertOne({
         issuer: {
             name: teamInfo.info.name,
