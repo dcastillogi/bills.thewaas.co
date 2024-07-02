@@ -26,8 +26,8 @@ export const GET = async (req: NextRequest) => {
             .find({
                 status: "pending",
                 startDate: {
-                    $lte: moment().tz("America/Bogota").startOf("day").toDate(),
-                    $gte: moment().tz("America/Bogota").endOf("day").toDate(),
+                    $gte: moment().tz("America/Bogota").startOf("day").toDate(),
+                    $lte: moment().tz("America/Bogota").endOf("day").toDate(),
                 },
             })
             .toArray();
@@ -140,8 +140,8 @@ export const GET = async (req: NextRequest) => {
             .find({
                 status: "active",
                 nextPayment: {
-                    $lte: moment().tz("America/Bogota").startOf("day").toDate(),
-                    $gte: moment().tz("America/Bogota").endOf("day").toDate(),
+                    $gte: moment().tz("America/Bogota").startOf("day").toDate(),
+                    $lte: moment().tz("America/Bogota").endOf("day").toDate(),
                 },
             })
             .toArray();
