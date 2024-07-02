@@ -301,7 +301,7 @@ export default function SubscriptionForm({
                                             defaultValue={field.value}
                                         >
                                             <SelectTrigger>
-                                                <SelectValue placeholder="+1" />
+                                                <SelectValue placeholder="País" />
                                             </SelectTrigger>
                                             <SelectContent>
                                                 {Object.values(COUNTRIES).map((country: any) => (
