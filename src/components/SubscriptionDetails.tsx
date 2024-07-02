@@ -36,7 +36,7 @@ export default function SubscriptionDetails({
                         </p>
                     </div>
                 </div>
-                <p className="hidden sm:block">
+                <p className="hidden sm:block text-right">
                     {toMoneyFormat(
                         subscription.plan.amount,
                         subscription.plan.currency
