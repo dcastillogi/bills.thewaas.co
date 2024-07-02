@@ -2,15 +2,14 @@ import { decrypt } from "@/lib/cipher";
 import ePayCo from "@/lib/epayco";
 import clientPromise from "@/lib/mongodb";
 import moment from "moment-timezone";
-import { NextResponse } from "next/server";
+import { NextResponse, NextRequest } from "next/server";
 
-export const GET = async (req: Request) => {
-    if (
-        req.headers.get("Authorization") !==
-            `Bearer ${process.env.CRON_SECRET}` &&
-        process.env.NODE_ENV !== "development"
-    ) {
-        return new Response("Unauthorized", { status: 401 });
+export const GET = async (req: NextRequest) => {
+    const authHeader = req.headers.get("authorization");
+    if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+        return new Response("Unauthorized", {
+            status: 401,
+        });
     }
 
     const client = await clientPromise;
@@ -146,7 +145,7 @@ export const GET = async (req: Request) => {
                 },
             })
             .toArray();
-        
+
         for (const sub of activeSubs) {
             subCount++;
             const team = await teams.findOne({ _id: sub.teamId });
