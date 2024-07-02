@@ -6,11 +6,11 @@ import { NextResponse, NextRequest } from "next/server";
 
 export const GET = async (req: NextRequest) => {
     const authHeader = req.headers.get("authorization");
-    if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+    /*if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
         return new Response("Unauthorized", {
             status: 401,
         });
-    }
+    }*/
 
     const client = await clientPromise;
     const db = await client.db("main");
