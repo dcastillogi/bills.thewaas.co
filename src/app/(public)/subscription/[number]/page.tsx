@@ -2,7 +2,7 @@ import SubscriptionDetails from "@/components/SubscriptionDetails";
 import SubscriptionForm from "@/components/SubscriptionForm";
 import { getSubscription } from "@/lib/actions";
 import { notFound } from "next/navigation";
-import { cn } from "@/lib/utils";
+import { cn, toMoneyFormat } from "@/lib/utils";
 import moment from "moment-timezone";
 
 export async function generateMetadata({
@@ -71,7 +71,12 @@ export default async function SubscriptionPage({
                         <p className=" text-muted-foreground mb-6">
                             Información del titular de la tarjeta
                         </p>
-                        <SubscriptionForm subscription={subscription._id.toString()} phone={subscription.team.info.phone} />
+                        <SubscriptionForm subscription={subscription._id.toString()} phone={subscription.team.info.phone} amount={
+                            `${toMoneyFormat(
+                                subscription.plan.amount,
+                                subscription.plan.currency
+                            )}/mes`
+                        } />
                     </div>
                 </div>
             )}

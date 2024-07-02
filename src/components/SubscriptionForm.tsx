@@ -84,9 +84,11 @@ const formSchema = z.object({
 export default function SubscriptionForm({
     subscription,
     phone,
+    amount
 }: {
     subscription: string;
     phone: string;
+    amount: string;
 }) {
     const [success, setSuccess] = useState(false);
     const hCaptchaRef = useRef<HCaptcha | null>(null);
@@ -505,7 +507,7 @@ export default function SubscriptionForm({
                                 Procesando...
                             </>
                         ) : (
-                            "Suscribirme ($7 USD/mes)"
+                            `Suscribirme (${amount})`
                         )}
                     </Button>
                     <div className="flex justify-center gap-2 -mt-2 items-center">

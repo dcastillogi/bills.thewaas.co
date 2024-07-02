@@ -41,6 +41,7 @@ export default function SubscriptionDetails({
                         subscription.plan.amount,
                         subscription.plan.currency
                     )}
+                    /mes
                 </p>
             </div>
             <div className="mt-4 space-y-4 text-primary/80">
@@ -53,8 +54,13 @@ export default function SubscriptionDetails({
                 <CalendarIcon className="w-4 h-4 text-primary" />
                 <AlertTitle>Información Importante</AlertTitle>
                 <AlertDescription>
-                    Tu suscripción se {subscription.status === "active" ? "renovará" : "activará"} automáticamente el {subscription.nextPayment.toLocaleDateString('es-ES', { day: '2-digit', month: 'long' })}
-                    
+                    Tu suscripción se{" "}
+                    {subscription.status === "active" ? "renovará" : "activará"}{" "}
+                    automáticamente el{" "}
+                    {subscription.nextPayment.toLocaleDateString("es-ES", {
+                        day: "2-digit",
+                        month: "long",
+                    })}
                 </AlertDescription>
             </Alert>
             <Separator className="mt-6 mb-4" />
@@ -64,7 +70,8 @@ export default function SubscriptionDetails({
                     {toMoneyFormat(
                         subscription.plan.amount,
                         subscription.plan.currency
-                    )}/mes
+                    )}
+                    /mes
                 </p>
             </div>
             <Separator className="my-4" />
@@ -74,13 +81,19 @@ export default function SubscriptionDetails({
                     {toMoneyFormat(
                         subscription.plan.amount,
                         subscription.plan.currency
-                    )}/mes
+                    )}
+                    /mes
                 </p>
             </div>
             <p className="text-sm mt-10 text-muted-foreground">
                 Si tienes alguna duda, no dudes en{" "}
                 <a
-                    href={`https://api.whatsapp.com/send/?phone=${subscription.team.info.phone}&text=${encodeURIComponent("Hola, tengo una duda sobre mi suscripción No. " + subscription._id)}`}
+                    href={`https://api.whatsapp.com/send/?phone=${
+                        subscription.team.info.phone
+                    }&text=${encodeURIComponent(
+                        "Hola, tengo una duda sobre mi suscripción No. " +
+                            subscription._id
+                    )}`}
                     target="_blank"
                     className="underline hover:text-white transition-colors"
                     rel="noopener noreferrer"
