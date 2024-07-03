@@ -104,7 +104,7 @@ export const POST = async (req: NextRequest) => {
         doc_number: docNumber,
     });
 
-    if (!customerData) {
+    if (!customerData || !customerData.status) {
         return Response.json(
             {
                 status: "error",

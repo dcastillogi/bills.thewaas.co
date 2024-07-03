@@ -21,6 +21,13 @@ export default class ePayCo {
         this.privateKey = decrypt(paymentOptions.private_key);
     }
 
+    verifyDocument(docType: string) {
+        if (!["CC", "CE", "TI", "PPN", "NIT", "SSN"].includes(docType)) {
+            return "DNI"
+        }
+        return docType
+    }
+
     async getApifyToken() {
         const encoded = Buffer.from(
             `${this.apiKey}:${this.privateKey}`
@@ -135,6 +142,7 @@ export default class ePayCo {
             },
             body: JSON.stringify({
                 ...customer,
+                doc_type: this.verifyDocument(customer.doc_type),
             }),
         });
         if (!response.ok) {
@@ -151,7 +159,6 @@ export default class ePayCo {
         doc_number: string;
         ip: string;
         url_confirmation: string;
-        
     }) {
         if (!this.base_token) {
             await this.getBaseToken();
@@ -166,6 +173,7 @@ export default class ePayCo {
                 },
                 body: JSON.stringify({
                     ...subscription,
+                    doc_type: this.verifyDocument(subscription.doc_type),
                 }),
             }
         );
@@ -198,6 +206,7 @@ export default class ePayCo {
                 },
                 body: JSON.stringify({
                     ...charge,
+                    doc_type: this.verifyDocument(charge.doc_type),
                 }),
             }
         );
