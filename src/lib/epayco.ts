@@ -22,7 +22,7 @@ export default class ePayCo {
     }
 
     verifyDocument(docType: string) {
-        if (!["CC", "CE", "TI", "PPN", "NIT", "SSN"].includes(docType)) {
+        if (!["CC", "CE", "TI", "PPN", "NIT", "SSN", "DNI"].includes(docType)) {
             return "DNI"
         }
         return docType
@@ -143,6 +143,7 @@ export default class ePayCo {
             body: JSON.stringify({
                 ...customer,
                 doc_type: this.verifyDocument(customer.doc_type),
+                doc_number: customer.doc_number.replace(/[^a-zA-Z0-9]/g, '')
             }),
         });
         if (!response.ok) {
@@ -174,6 +175,7 @@ export default class ePayCo {
                 body: JSON.stringify({
                     ...subscription,
                     doc_type: this.verifyDocument(subscription.doc_type),
+                    doc_number: subscription.doc_number.replace(/[^a-zA-Z0-9]/g, '')
                 }),
             }
         );
@@ -207,6 +209,7 @@ export default class ePayCo {
                 body: JSON.stringify({
                     ...charge,
                     doc_type: this.verifyDocument(charge.doc_type),
+                    doc_number: charge.doc_number.replace(/[^a-zA-Z0-9]/g, '')
                 }),
             }
         );
