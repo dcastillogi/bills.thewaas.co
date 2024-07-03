@@ -22,6 +22,7 @@ export const POST = async (req: NextRequest) => {
         subscription,
         docNumber,
         docType,
+        ip
     } = await req.json();
 
     const hCaptchaResponse = await fetch(
@@ -171,10 +172,7 @@ export const POST = async (req: NextRequest) => {
                 token_card: tokenData.id,
                 doc_type: docType,
                 doc_number: docNumber,
-                ip:
-                    process.env.NODE_ENV === "development"
-                        ? "152.201.50.47"
-                        : req.ip!,
+                ip,
                 url_confirmation:
                     "https://bills.thewaas.co/api/subscriptions/confirm",
             });
@@ -201,10 +199,7 @@ export const POST = async (req: NextRequest) => {
                         subscriptionId: subId,
                         customerId: customerData.data.customerId,
                         cardToken: encrypt(tokenData.id),
-                        ip:
-                            process.env.NODE_ENV === "development"
-                                ? "152.201.50.47"
-                                : req.ip!,
+                        ip,
                         docType,
                         docNumber,
                     },
@@ -226,10 +221,7 @@ export const POST = async (req: NextRequest) => {
             doc_type: docType,
             doc_number: docNumber,
             subscription: subId,
-            ip:
-                process.env.NODE_ENV === "development"
-                    ? "152.201.50.47"
-                    : req.ip!,
+            ip: ip,
             url_confirmation:
                 "https://bills.thewaas.co/api/subscriptions/confirm",
         });
@@ -275,10 +267,7 @@ export const POST = async (req: NextRequest) => {
                         type: "epayco",
                         customerId: customerData.data.customerId,
                         cardToken: encrypt(tokenData.id),
-                        ip:
-                            process.env.NODE_ENV === "development"
-                                ? "152.201.50.47"
-                                : req.ip!,
+                        ip: ip,
                         docType,
                         docNumber,
                     },

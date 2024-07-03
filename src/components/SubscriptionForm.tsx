@@ -78,13 +78,15 @@ const formSchema = z.object({
         .string()
         .min(3, { message: "Debes ingresar un cvc válido" })
         .max(4, { message: "Debes ingresar un cvc válido" }),
-    phoneCode: z.string().min(1, { message: "Debes ingresar un código celular válido" }),
+    phoneCode: z
+        .string()
+        .min(1, { message: "Debes ingresar un código celular válido" }),
 });
 
 export default function SubscriptionForm({
     subscription,
     phone,
-    amount
+    amount,
 }: {
     subscription: string;
     phone: string;
@@ -123,6 +125,10 @@ export default function SubscriptionForm({
             return;
         }
 
+        const ip = await fetch("https://api.ipify.org?format=json")
+            .then((res) => res.json())
+            .then((data) => data.ip);
+
         const response = await fetch("/api/subscriptions/formalize", {
             method: "POST",
             headers: {
@@ -132,6 +138,7 @@ export default function SubscriptionForm({
                 ...values,
                 subscription,
                 token,
+                ip,
             }),
             cache: "no-cache",
         });
@@ -306,14 +313,18 @@ export default function SubscriptionForm({
                                                 <SelectValue placeholder="País" />
                                             </SelectTrigger>
                                             <SelectContent>
-                                                {Object.values(COUNTRIES).map((country: any) => (
-                                                    <SelectItem
-                                                        value={country.phoneCode}
-                                                        key={`phone-code-select-${country.phoneCode}`}
-                                                    >
-                                                        +{country.phoneCode}
-                                                    </SelectItem>
-                                                ))}
+                                                {Object.values(COUNTRIES).map(
+                                                    (country: any) => (
+                                                        <SelectItem
+                                                            value={
+                                                                country.phoneCode
+                                                            }
+                                                            key={`phone-code-select-${country.phoneCode}`}
+                                                        >
+                                                            +{country.phoneCode}
+                                                        </SelectItem>
+                                                    )
+                                                )}
                                             </SelectContent>
                                         </Select>
                                     </FormControl>
