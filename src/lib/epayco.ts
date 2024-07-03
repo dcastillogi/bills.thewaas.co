@@ -34,6 +34,7 @@ export default class ePayCo {
         ).toString("base64");
         const response = await fetch(`${APIFY_URL}/login`, {
             method: "POST",
+            cache: "no-cache",
             headers: {
                 "Content-Type": "application/json",
                 Authorization: `Basic ${encoded}`,
@@ -52,6 +53,7 @@ export default class ePayCo {
             headers: {
                 "Content-Type": "application/json",
             },
+            cache: "no-cache",
             body: JSON.stringify({
                 public_key: this.apiKey,
                 private_key: this.privateKey,
@@ -79,6 +81,7 @@ export default class ePayCo {
         }
         const response = await fetch(`${BASE_URL}/recurring/v1/plan/create`, {
             method: "POST",
+            "cache": "no-cache",
             headers: {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${this.base_token}`,
@@ -102,6 +105,7 @@ export default class ePayCo {
         }
         const response = await fetch(`${BASE_URL}/v1/tokens`, {
             method: "POST",
+            cache: "no-cache",
             headers: {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${this.base_token}`,
@@ -136,6 +140,7 @@ export default class ePayCo {
         }
         const response = await fetch(`${BASE_URL}/payment/v1/customer/create`, {
             method: "POST",
+            cache: "no-cache",
             headers: {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${this.base_token}`,
@@ -173,6 +178,7 @@ export default class ePayCo {
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${this.base_token}`,
                 },
+                cache: "no-cache",
                 body: JSON.stringify({
                     ...subscription,
                     doc_type: this.verifyDocument(subscription.doc_type),
@@ -248,6 +254,7 @@ export default class ePayCo {
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${this.base_token}`,
                 },
+                cache: "no-cache",
                 body: JSON.stringify({
                     ...customer,
                     doc_type: customer.doc_type
