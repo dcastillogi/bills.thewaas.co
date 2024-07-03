@@ -36,7 +36,6 @@ export const POST = async (req: Request) => {
         email,
         nextPayment: momentDate.toDate(),
         startDate: momentDate.toDate(),
-        day: momentDate.day(),
         planId: new ObjectId(plan),
         reference,
         createdAt: new Date(),
