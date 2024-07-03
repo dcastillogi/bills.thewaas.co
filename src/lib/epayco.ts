@@ -23,9 +23,9 @@ export default class ePayCo {
 
     verifyDocument(docType: string) {
         if (!["CC", "CE", "TI", "PPN", "NIT", "SSN", "DNI"].includes(docType)) {
-            return "DNI"
+            return "DNI";
         }
-        return docType
+        return docType;
     }
 
     async getApifyToken() {
@@ -131,7 +131,7 @@ export default class ePayCo {
         doc_type: string;
         doc_number: string;
     }) {
-        if (!this.apify_token) {
+        if (!this.base_token) {
             await this.getBaseToken();
         }
         const response = await fetch(`${BASE_URL}/payment/v1/customer/create`, {
@@ -143,7 +143,7 @@ export default class ePayCo {
             body: JSON.stringify({
                 ...customer,
                 doc_type: this.verifyDocument(customer.doc_type),
-                doc_number: customer.doc_number.replace(/[^a-zA-Z0-9]/g, '')
+                doc_number: customer.doc_number.replace(/[^a-zA-Z0-9]/g, ""),
             }),
         });
         if (!response.ok) {
@@ -175,7 +175,10 @@ export default class ePayCo {
                 body: JSON.stringify({
                     ...subscription,
                     doc_type: this.verifyDocument(subscription.doc_type),
-                    doc_number: subscription.doc_number.replace(/[^a-zA-Z0-9]/g, '')
+                    doc_number: subscription.doc_number.replace(
+                        /[^a-zA-Z0-9]/g,
+                        ""
+                    ),
                 }),
             }
         );
@@ -209,7 +212,48 @@ export default class ePayCo {
                 body: JSON.stringify({
                     ...charge,
                     doc_type: this.verifyDocument(charge.doc_type),
-                    doc_number: charge.doc_number.replace(/[^a-zA-Z0-9]/g, '')
+                    doc_number: charge.doc_number.replace(/[^a-zA-Z0-9]/g, ""),
+                }),
+            }
+        );
+        if (!response.ok) {
+            return false;
+        }
+        return await response.json();
+    }
+
+    async updateCustomer(
+        customerId: string,
+        customer: {
+            name?: string;
+            last_name?: string;
+            email?: string;
+            city?: string;
+            address?: string;
+            phone?: string;
+            doc_type?: string;
+            doc_number?: string;
+        }
+    ) {
+        if (!this.base_token) {
+            await this.getBaseToken();
+        }
+        const response = await fetch(
+            `${BASE_URL}/payment/v1/customer/edit/${this.apiKey}/${customerId}`,
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${this.base_token}`,
+                },
+                body: JSON.stringify({
+                    ...customer,
+                    doc_type: customer.doc_type
+                        ? this.verifyDocument(customer.doc_type)
+                        : undefined,
+                    doc_number: customer.doc_number
+                        ? customer.doc_number.replace(/[^a-zA-Z0-9]/g, "")
+                        : undefined,
                 }),
             }
         );
