@@ -46,7 +46,7 @@ export const DOCUMENT_TYPES = [
     },
     {
         name: "Pasaporte",
-        id: "PA",
+        id: "PPN",
         country: "CO",
     },
     {

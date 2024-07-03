@@ -33,14 +33,13 @@ import { useRef, useState } from "react";
 import { LockClosedIcon } from "@radix-ui/react-icons";
 import { COUNTRIES, DOCUMENT_TYPES } from "@/lib/const";
 import { Loader2Icon } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 const formSchema = z.object({
     name: z
         .string({ message: "Debes ingresar un nombre" })
         .min(2, { message: "Debes ingresar un nombre válido" }),
-    lastName: z
-        .string({ message: "Debes ingresar un apellido" })
-        .min(2, { message: "Debes ingresar un apellido válido" }),
+    lastName: z.string().optional(),
     docType: z.enum(DOCUMENT_TYPES.map((doc) => doc.id) as any, {
         message: "Debes seleccionar un tipo de documento válido",
     }),
@@ -93,6 +92,7 @@ export default function SubscriptionForm({
     amount: string;
 }) {
     const [success, setSuccess] = useState(false);
+    const [docType, setDocType] = useState("");
     const hCaptchaRef = useRef<HCaptcha | null>(null);
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -123,6 +123,17 @@ export default function SubscriptionForm({
         if (!token) {
             hCaptchaRef.current?.execute();
             return;
+        }
+
+        if (values.docType === "NIT" || values.docType === "EIN") {
+            values.lastName = "";
+        } else {
+            if (!values.lastName) {
+                form.setError("lastName", {
+                    message: "Debes ingresar un apellido",
+                });
+                return;
+            }
         }
 
         const ip = await fetch("https://api.ipify.org?format=json")
@@ -189,34 +200,6 @@ export default function SubscriptionForm({
                     */}
 
                 <div className="flex flex-col gap-4">
-                    <div className="grid sm:grid-cols-2 gap-4">
-                        <FormField
-                            control={form.control}
-                            name="name"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Nombre (s)</FormLabel>
-                                    <FormControl>
-                                        <Input placeholder="John" {...field} />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                        <FormField
-                            control={form.control}
-                            name="lastName"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Apellido (s)</FormLabel>
-                                    <FormControl>
-                                        <Input placeholder="Doe" {...field} />
-                                    </FormControl>
-                                    <FormMessage />
-                                </FormItem>
-                            )}
-                        />
-                    </div>
                     <div className="grid sm:grid-cols-7 gap-4">
                         <FormField
                             control={form.control}
@@ -226,7 +209,10 @@ export default function SubscriptionForm({
                                     <FormLabel>Tipo</FormLabel>
                                     <FormControl>
                                         <Select
-                                            onValueChange={field.onChange}
+                                            onValueChange={(value) => {
+                                                setDocType(value);
+                                                field.onChange(value);
+                                            }}
                                             defaultValue={field.value}
                                         >
                                             <SelectTrigger>
@@ -281,6 +267,52 @@ export default function SubscriptionForm({
                             )}
                         />
                     </div>
+                    <div className="grid sm:grid-cols-2 gap-4">
+                        <FormField
+                            control={form.control}
+                            name="name"
+                            render={({ field }) => (
+                                <FormItem
+                                    className={cn({
+                                        "sm:col-span-2":
+                                            docType === "NIT" ||
+                                            docType === "EIN",
+                                    })}
+                                >
+                                    <FormLabel>
+                                        {docType === "NIT" || docType === "EIN"
+                                            ? "Razón Social"
+                                            : "Nombre (s)"}
+                                    </FormLabel>
+
+                                    <FormControl>
+                                        <Input placeholder="John" {...field} />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        {!(docType === "NIT" || docType === "EIN") && (
+                            <FormField
+                                control={form.control}
+                                name="lastName"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Apellido (s)</FormLabel>
+
+                                        <FormControl>
+                                            <Input
+                                                placeholder="Doe"
+                                                {...field}
+                                            />
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                        )}
+                    </div>
+
                     <FormField
                         control={form.control}
                         name="email"
