@@ -144,6 +144,7 @@ export default class ePayCo {
                 ...customer,
                 doc_type: this.verifyDocument(customer.doc_type),
                 doc_number: customer.doc_number.replace(/[^a-zA-Z0-9]/g, ""),
+                city: customer.city.replace(/[^a-zA-Z0-9]/g, ""),
             }),
         });
         if (!response.ok) {
@@ -209,6 +210,7 @@ export default class ePayCo {
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${this.base_token}`,
                 },
+                cache: "no-cache",
                 body: JSON.stringify({
                     ...charge,
                     doc_type: this.verifyDocument(charge.doc_type),

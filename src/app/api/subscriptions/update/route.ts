@@ -173,6 +173,7 @@ export const GET = async (req: NextRequest) => {
                             logs: {
                                 date: new Date(),
                                 message: `No pudimos cobrar la cuota automáticamente`,
+                                error: chargeData
                             } as any,
                         },
                     }
