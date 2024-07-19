@@ -339,7 +339,7 @@ const MyDocument = ({
                     </View>
                     {bill.discount > 0 && (
                         <View style={styles.tableRow}>
-                            <Text style={styles.col2}>Descuento</Text>
+                            <Text style={styles.totalTableCol1}>Descuento</Text>
                             <Text style={styles.lastCol}>
                                 -{toMoneyFormat(bill.discount, bill.currency)}
                             </Text>
