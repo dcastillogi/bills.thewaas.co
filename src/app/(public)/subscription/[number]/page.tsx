@@ -75,7 +75,7 @@ export default async function SubscriptionPage({
                             <div className="w-full fixed bottom-0 h-32 grid place-items-center">
                                 <div className="max-w-lg px-4 sm:px-0 w-full">
                                     <PaypalButton
-                                        planId={subscription.planId}
+                                        planId={subscription.plan.paypalId}
                                     />
                                 </div>
                             </div>
