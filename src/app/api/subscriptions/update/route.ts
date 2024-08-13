@@ -25,6 +25,7 @@ export const GET = async (req: NextRequest) => {
         const pendingSubs = await subscriptions
             .find({
                 status: "pending",
+                type: "epayco",
                 startDate: {
                     $gte: moment().tz("America/Bogota").startOf("day").toDate(),
                     $lte: moment().tz("America/Bogota").endOf("day").toDate(),
@@ -139,6 +140,7 @@ export const GET = async (req: NextRequest) => {
         const activeSubs = await subscriptions
             .find({
                 status: "active",
+                type: "epayco",
                 nextPayment: {
                     $gte: moment().tz("America/Bogota").startOf("day").toDate(),
                     $lte: moment().tz("America/Bogota").endOf("day").toDate(),
