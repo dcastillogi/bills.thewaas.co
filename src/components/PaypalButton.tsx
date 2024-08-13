@@ -31,6 +31,8 @@ const ButtonWrapper = ({ type, planId } : {type: string, planId: string}) => {
             style={{
                 label: "subscribe",
                 layout: "horizontal",
+                color: "silver",
+                tagline: false,
             }}
         />
     );
