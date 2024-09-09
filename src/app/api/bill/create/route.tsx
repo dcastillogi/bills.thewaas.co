@@ -122,11 +122,11 @@ export const POST = async (req: Request) => {
         }
     }
     const emmitedAtAdjusted = moment
-        .tz(createdAt, "America/Bogota")
+        .tz(createdAt.split("T")[0] + "T05:00:00.000Z", "America/Bogota")
         .startOf("day")
         .toDate();
     const expiresAtAdjusted = moment
-        .tz(expiresAt, "America/Bogota")
+        .tz(expiresAt.split("T")[0] + "T05:00:00.000Z", "America/Bogota")
         .endOf("day")
         .toDate();
     const newBill = await collection.insertOne({

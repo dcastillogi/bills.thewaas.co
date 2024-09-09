@@ -13,7 +13,6 @@ export const GET = async (req: Request) => {
             status: 404,
         });
     }
-    console.log(bill.expiresAt);
     // return it as stream
     const pdfStream = await ReactPDF.renderToStream(
         <MyDocument
