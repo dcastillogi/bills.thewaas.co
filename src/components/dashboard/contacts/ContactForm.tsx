@@ -44,10 +44,10 @@ const formSchema = z.object({
     email: z.string().email(),
     phone: z
         .string()
-        .min(11, {
+        .min(10, {
             message: "El número de celular debe tener 10 dígitos",
         })
-        .max(13, {
+        .max(10, {
             message: "El número de celular debe tener 10 dígitos",
         }),
     phoneCode: z
